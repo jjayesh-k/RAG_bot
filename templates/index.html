@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tata Motors AI Assistant</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        :root {
+            --primary-soft: #BFDBFE; --primary-deep: #3B82F6; --accent: #60A5FA;
+            --bg-gradient-start: #F8FAFC; --bg-gradient-end: #EFF6FF;
+            --text-main: #1E293B; --text-sub: #475569; --text-light: #94A3B8;
+            --white-glass: rgba(255, 255, 255, 0.9);
+            --border-light: #DBEAFE;
+            --status-emerald: #10B981; --status-yellow: #F59E0B; --status-red: #EF4444;
+        }
+        html { font-size: 85%; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text-main);
+            height: 100vh; overflow: hidden; display: flex; flex-direction: column;
+        }
+        /* ... [Keep all your existing CSS for scrollbars, header, etc.] ... */
+        
+        /* Add this NEW CSS for the Trash Icon */
+        .trash-btn {
+            background: none; border: none; color: var(--text-light);
+            cursor: pointer; padding: 4px; transition: all 0.2s;
+        }
+        .trash-btn:hover { color: var(--status-red); transform: scale(1.1); }
+
+        /* ... [Paste the rest of your existing CSS styles here] ... */
+        /* Copy the CSS from your previous file to keep the styling consistent */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-soft); }
+        header { height: 65px; background: var(--white-glass); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(59, 130, 246, 0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .logo-container { width: 42px; height: 42px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 6px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1); border: 1px solid var(--border-light); }
+        .logo-container img { height: 100%; width: auto; object-fit: contain; }
+        .header-title h1 { font-size: 1.1rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.01em; }
+        .header-subtitle { display: flex; align-items: center; gap: 0.5rem; }
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary-deep); animation: pulse-glow 3s infinite; }
+        .header-subtitle p { font-size: 0.8rem; color: var(--text-light); font-weight: 500; }
+        .status-badge { padding: 0.4rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; background: white; border: 1px solid var(--border-light); display: flex; align-items: center; gap: 0.5rem; color: var(--text-sub); box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .status-indicator { width: 8px; height: 8px; border-radius: 50%; background: var(--text-light); }
+        .main-container { display: flex; flex: 1; overflow: hidden; }
+        .sidebar { width: 320px; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.6); display: flex; flex-direction: column; padding: 1.5rem; overflow-y: auto; }
+        .section-title { font-size: 0.75rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .section-title i { color: var(--primary-deep); }
+        .upload-zone { position: relative; border: 2px dashed #CBD5E1; border-radius: 16px; height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; background: rgba(255, 255, 255, 0.5); transition: all 0.3s ease; margin-bottom: 1.5rem; overflow: hidden; }
+        .upload-zone:hover { border-color: var(--primary-deep); background: rgba(239, 246, 255, 0.7); }
+        .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 20; }
+        .upload-icon { width: 50px; height: 50px; background: white; color: var(--primary-deep); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1); transition: all 0.3s ease; border: 1px solid var(--border-light); }
+        .upload-icon i { font-size: 1.5rem; }
+        .upload-title { font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.2rem; }
+        .upload-subtitle { font-size: 0.75rem; color: var(--text-light); padding: 0 1rem; line-height: 1.4; }
+        .files-section { margin-bottom: 1.5rem; opacity: 0; transition: opacity 0.5s ease; }
+        .files-section.visible { opacity: 1; }
+        .files-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+        .file-count-badge { padding: 0.2rem 0.5rem; border-radius: 50px; background: #EFF6FF; color: var(--primary-deep); font-size: 0.7rem; font-weight: 700; }
+        .files-list { display: flex; flex-direction: column; gap: 0.5rem; max-height: 200px; overflow-y: auto; padding-right: 0.25rem; }
+        .file-item { background: white; border-radius: 10px; padding: 0.6rem; border: 1px solid var(--border-light); display: flex; align-items: center; gap: 0.6rem; transition: all 0.2s ease; }
+        .file-item:hover { border-color: var(--primary-deep); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08); }
+        .file-icon { width: 32px; height: 32px; border-radius: 8px; background: #F1F5F9; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .file-icon i { font-size: 0.9rem; }
+        .file-icon.pdf i { color: #EF4444; } .file-icon.txt i { color: #3B82F6; }
+        .file-name { font-size: 0.8rem; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .file-meta { font-size: 0.7rem; color: var(--text-light); }
+        .info-card { background: #F8FAFC; border-radius: 12px; padding: 1rem; border: 1px solid var(--border-light); margin-top: auto; }
+        .info-card-content { display: flex; align-items: flex-start; gap: 0.75rem; }
+        .info-icon { width: 32px; height: 32px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary-deep); border: 1px solid var(--border-light); }
+        .info-text { font-size: 0.75rem; color: var(--text-sub); line-height: 1.5; }
+        .info-text strong { display: block; font-size: 0.8rem; color: var(--text-main); margin-bottom: 0.2rem; }
+        .chat-container { flex: 1; display: flex; flex-direction: column; position: relative; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 2rem 3rem 8rem 3rem; display: flex; flex-direction: column; gap: 1.5rem; }
+        .welcome-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; animation: fadeIn 0.8s ease-out; }
+        .welcome-icon-wrapper { position: relative; margin-bottom: 2rem; }
+        .welcome-glow { position: absolute; inset: 0; background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; filter: blur(20px); animation: pulseGlow 4s infinite; }
+        .welcome-icon { position: relative; width: 80px; height: 80px; background: white; border-radius: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15); animation: float 6s ease-in-out infinite; border: 1px solid var(--border-light); }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .welcome-icon i { font-size: 2.5rem; background: linear-gradient(135deg, var(--accent), var(--primary-deep)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .welcome-title { font-size: 1.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+        .welcome-subtitle { font-size: 1rem; color: var(--text-light); max-width: 450px; line-height: 1.6; font-weight: 400; }
+        .message { display: flex; gap: 1rem; animation: fadeInUp 0.4s ease-out; max-width: 800px; margin: 0 auto; width: 100%; }
+        .message.user { flex-direction: row-reverse; }
+        .message-avatar { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.9rem; }
+        .message.user .message-avatar { background: #F1F5F9; color: var(--text-sub); }
+        .message.assistant .message-avatar { background: linear-gradient(135deg, var(--accent), var(--primary-deep)); color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2); }
+        .message-content-wrapper { max-width: 75%; }
+        .message-bubble { padding: 1rem 1.25rem; border-radius: 18px; font-size: 0.95rem; line-height: 1.6; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .message.user .message-bubble { background: white; color: var(--text-main); border: 1px solid var(--border-light); border-top-right-radius: 4px; }
+        .message.assistant .message-bubble { background: linear-gradient(to bottom right, #FFFFFF, #F0F9FF); color: var(--text-main); border: 1px solid var(--border-light); border-top-left-radius: 4px; }
+        .message-label { font-size: 0.7rem; font-weight: 600; color: var(--text-light); margin-top: 0.4rem; opacity: 0; transition: opacity 0.3s ease; }
+        .message:hover .message-label { opacity: 1; }
+        .message.user .message-label { text-align: right; margin-right: 0.2rem; }
+        .message.assistant .message-label { margin-left: 0.2rem; }
+        .input-container { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; background: linear-gradient(to top, #F8FAFC 0%, rgba(248, 250, 252, 0.8) 70%, transparent 100%); z-index: 30; }
+        .input-wrapper { max-width: 800px; margin: 0 auto; position: relative; }
+        .input-box { position: relative; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-radius: 20px; box-shadow: 0 8px 30px rgba(59, 130, 246, 0.05); border: 1px solid var(--border-light); padding: 0.5rem; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; }
+        .input-box:focus-within { border-color: var(--primary-deep); box-shadow: 0 12px 40px rgba(59, 130, 246, 0.12); transform: translateY(-2px); }
+        .attach-btn, .send-btn { width: 42px; height: 42px; border-radius: 14px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; }
+        .attach-btn { background: transparent; color: var(--text-light); }
+        .attach-btn:hover { background: #F1F5F9; color: var(--text-sub); }
+        .send-btn { background: var(--primary-deep); color: white; }
+        .send-btn:hover { background: var(--accent); transform: scale(1.05); }
+        .send-btn:disabled { background: var(--text-light); transform: none; cursor: default; }
+        .message-input { flex: 1; border: none; background: transparent; font-size: 0.95rem; color: var(--text-main); padding: 0.8rem 0.5rem; outline: none; }
+        .message-input::placeholder { color: var(--text-light); }
+        .input-footer { text-align: center; margin-top: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+        .input-footer i { font-size: 0.7rem; color: var(--primary-deep); }
+        .input-footer p { font-size: 0.7rem; color: var(--text-light); font-weight: 500; }
+        .dot-flashing { position: relative; width: 6px; height: 6px; border-radius: 5px; background-color: var(--text-light); animation: dot-flashing 1s infinite linear alternate; animation-delay: 0.5s; }
+        .dot-flashing::before, .dot-flashing::after { content: ''; display: inline-block; position: absolute; top: 0; width: 6px; height: 6px; border-radius: 5px; background-color: var(--text-light); animation: dot-flashing 1s infinite alternate; }
+        .dot-flashing::before { left: -10px; animation-delay: 0s; }
+        .dot-flashing::after { left: 10px; animation-delay: 1s; }
+        @keyframes dot-flashing { 0% { background-color: var(--text-light); } 50%, 100% { background-color: var(--text-sub); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse-glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @media (max-width: 768px) { .sidebar { display: none; } .message-content-wrapper { max-width: 85%; } .chat-messages { padding: 1rem; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="logo-container">
+                 <img src="{{ url_for('static', filename='tata.png') }}" alt="Tata Motors">
+            </div>
+            <div class="header-title">
+                <h1>TATA MOTORS</h1>
+                <div class="header-subtitle">
+                    <span class="status-dot"></span>
+                    <p>AI Document Assistant</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-badge" id="globalStatus">
+            <span class="status-indicator" id="statusDot"></span>
+            <span id="statusText">Ready</span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        
+        <aside class="sidebar">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2 class="section-title" style="margin-bottom: 0;">
+                        <i class="fa-solid fa-layer-group"></i> Documents
+                    </h2>
+                    <button class="trash-btn" onclick="clearMemory()" title="Clear Memory">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+                
+                <div class="upload-zone" id="dropZone">
+                    <input type="file" id="fileInput" multiple accept=".txt,.pdf">
+                    
+                    <div id="stateIdle">
+                        <div class="upload-icon">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <p class="upload-title">Click or Drop Files</p>
+                        <p class="upload-subtitle">Upload PDF or TXT to begin</p>
+                    </div>
+
+                    <div class="upload-state" id="stateLoading" style="display:none; position:absolute; inset:0; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,255,255,0.9);">
+                        <div class="loading-spinner"></div>
+                        <p class="upload-title">Analyzing...</p>
+                    </div>
+
+                    <div class="upload-state" id="stateSuccess" style="display:none; position:absolute; inset:0; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,255,255,0.9);">
+                        <div class="success-icon" style="color:var(--status-emerald); font-size:2rem; margin-bottom:0.5rem;">
+                            <i class="fa-solid fa-check-circle"></i>
+                        </div>
+                        <p class="upload-title">Indexed</p>
+                        <p class="upload-subtitle" id="fileCountMsg">Ready</p>
+                    </div>
+                </div>
+
+                <div class="files-section" id="uploadedFilesSection">
+                    <div class="files-header">
+                        <h3 class="section-title" style="margin-bottom: 0;">
+                            <i class="fa-solid fa-files"></i> Files
+                        </h3>
+                        <span class="file-count-badge" id="fileCount">0</span>
+                    </div>
+                    <div class="files-list" id="filesList"></div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-content">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div class="info-text">
+                        <strong>Context Aware</strong>
+                        The AI remembers all uploaded files. Use the trash icon above to clear memory.
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="chat-container">
+            <div class="chat-messages" id="chatBox">
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-icon-wrapper">
+                        <div class="welcome-glow"></div>
+                        <div class="welcome-icon">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                    </div>
+                    <h3 class="welcome-title">How can I assist you?</h3>
+                    <p class="welcome-subtitle">
+                        I am trained on your uploaded documents. Upload a file to get started or ask a question.
+                    </p>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <div class="input-box">
+                        <button class="attach-btn" onclick="document.getElementById('fileInput').click()">
+                            <i class="fa-solid fa-paperclip"></i>
+                        </button>
+                        
+                        <input type="text" class="message-input" id="userInput" 
+                            placeholder="Type your question here..." 
+                            onkeypress="handleEnter(event)" autocomplete="off">
+                        
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="input-footer">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <p>Internal Use Only • Verify Important Details</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DOM Elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const stateIdle = document.getElementById('stateIdle');
+        const stateLoading = document.getElementById('stateLoading');
+        const stateSuccess = document.getElementById('stateSuccess');
+        const fileCountMsg = document.getElementById('fileCountMsg');
+        const statusText = document.getElementById('statusText');
+        const statusDot = document.getElementById('statusDot');
+        const uploadedFilesSection = document.getElementById('uploadedFilesSection');
+        const filesList = document.getElementById('filesList');
+        const fileCount = document.getElementById('fileCount');
+        
+        let uploadedFiles = [];
+
+        // NEW FUNCTION: Clear Memory
+        async function clearMemory() {
+            if(!confirm("Clear all AI memory and uploaded files?")) return;
+            
+            try {
+                const res = await fetch('/reset', { method: 'POST' });
+                if(res.ok) {
+                    uploadedFiles = [];
+                    updateFilesList();
+                    // Reset UI
+                    document.getElementById('chatBox').innerHTML = `
+                        <div class="welcome-screen" id="welcomeScreen" style="display:flex;">
+                            <div class="welcome-icon-wrapper">
+                                <div class="welcome-glow"></div>
+                                <div class="welcome-icon"><i class="fa-solid fa-brain"></i></div>
+                            </div>
+                            <h3 class="welcome-title">How can I assist you?</h3>
+                            <p class="welcome-subtitle">Memory cleared. Upload a file to start fresh.</p>
+                        </div>
+                    `;
+                    setStatus('Ready', 'slate');
+                }
+            } catch(e) {
+                alert("Failed to clear memory");
+            }
+        }
+
+        // Handle Drag Events
+        ['dragenter', 'dragover'].forEach(evt => {
+            dropZone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--primary-deep)';
+                dropZone.style.background = 'rgba(239, 246, 255, 0.7)';
+            });
+        });
+        
+        ['dragleave', 'drop'].forEach(evt => {
+            dropZone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = '';
+                dropZone.style.background = '';
+            });
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if(files.length > 0) uploadFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if(e.target.files.length > 0) uploadFiles(e.target.files);
+            fileInput.value = '';
+        });
+
+        async function uploadFiles(files) {
+            stateIdle.style.display = 'none';
+            stateLoading.style.display = 'flex';
+            setStatus('Processing...', 'yellow');
+
+            const formData = new FormData();
+            const newFiles = [];
+            
+            for (const file of files) {
+                formData.append('files', file);
+                newFiles.push({
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    type: file.name.split('.').pop().toUpperCase()
+                });
+            }
+
+            try {
+                const res = await fetch('/upload', { method: 'POST', body: formData });
+                const data = await res.json();
+                
+                if(res.ok) {
+                    uploadedFiles = [...uploadedFiles, ...newFiles];
+                    updateFilesList();
+                    
+                    fileCountMsg.innerText = `${data.count} chunks`;
+                    stateLoading.style.display = 'none';
+                    stateSuccess.style.display = 'flex';
+                    setStatus('Ready', 'emerald');
+                    
+                    const welcome = document.getElementById('welcomeScreen');
+                    if(welcome) {
+                        welcome.style.opacity = '0';
+                        setTimeout(() => { if(welcome) welcome.style.display = 'none'; }, 500);
+                    }
+                    
+                    setTimeout(() => {
+                        stateSuccess.style.display = 'none';
+                        stateIdle.style.display = 'block';
+                    }, 3000);
+                    
+                } else {
+                    alert("Error: " + data.error);
+                    resetUploadState();
+                }
+            } catch (e) {
+                alert("Upload failed. Check server.");
+                resetUploadState();
+            }
+        }
+
+        function resetUploadState() {
+            stateLoading.style.display = 'none';
+            stateSuccess.style.display = 'none';
+            stateIdle.style.display = 'block';
+            setStatus('Error', 'red');
+        }
+
+        function updateFilesList() {
+            filesList.innerHTML = '';
+            uploadedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const iconClass = file.type === 'PDF' ? 'pdf' : 'txt';
+                const icon = file.type === 'PDF' ? 'fa-file-pdf' : 'fa-file-alt';
+                
+                fileItem.innerHTML = `
+                    <div class="file-icon ${iconClass}">
+                        <i class="fa-solid ${icon}"></i>
+                    </div>
+                    <div style="flex:1; min-width:0;">
+                        <p class="file-name">${file.name}</p>
+                        <p class="file-meta">${file.size}</p>
+                    </div>
+                    <i class="fa-solid fa-check" style="color:var(--status-emerald); font-size:0.7rem;"></i>
+                `;
+                
+                filesList.appendChild(fileItem);
+            });
+            
+            if(uploadedFiles.length > 0) {
+                uploadedFilesSection.classList.add('visible');
+                fileCount.textContent = uploadedFiles.length;
+            } else {
+                uploadedFilesSection.classList.remove('visible');
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i)) + ' ' + sizes[i];
+        }
+
+        function setStatus(text, color) {
+            const colors = {
+                'yellow': 'var(--status-yellow)',
+                'emerald': 'var(--status-emerald)',
+                'red': 'var(--status-red)',
+                'slate': 'var(--text-light)'
+            };
+            statusText.innerText = text;
+            statusDot.style.background = colors[color] || colors['slate'];
+        }
+
+        var last_response = [];
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const chatBox = document.getElementById('chatBox');
+            const sendBtn = document.getElementById('sendBtn');
+            const msg = input.value.trim();
+            
+            if(!msg) return;
+
+            const welcome = document.getElementById('welcomeScreen');
+            if(welcome) welcome.style.display = 'none';
+
+            addMessage("You", msg, true);
+            input.value = "";
+
+            input.disabled = true;
+            sendBtn.disabled = true;
+            setStatus('Thinking...', 'yellow');
+
+            const botMsgDiv = addMessage("TATA Assistant", "", false);
+            const contentDiv = botMsgDiv.querySelector('.message-bubble');
+            
+            contentDiv.innerHTML = `
+                <div style="display: flex; align-items: center; height: 24px;">
+                    <div class="dot-flashing"></div>
+                </div>`;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: "```\n" + last_response.join('\n') + "\n```\n" + msg})
+                });
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let isFirstToken = true;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value);
+                    const lines = chunk.split('\n');
+                    
+                    for (const line of lines) {
+                        if (!line.trim()) continue;
+                        try {
+                            const data = JSON.parse(line);
+                            
+                            if (data.type === 'token') {
+                                if (isFirstToken) {
+                                    contentDiv.innerText = "";
+                                    isFirstToken = false;
+                                }
+                                contentDiv.innerText += data.content;
+                                chatBox.scrollTop = chatBox.scrollHeight;
+                            }
+                            
+                        } catch (e) {}
+                    }
+                }
+                
+                last_response.push(contentDiv.innerText);
+                last_response = last_response.slice(-5);
+                setStatus('Ready', 'emerald');
+                
+            } catch (e) {
+                contentDiv.innerHTML = `
+                    <div style="color:var(--status-red); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-exclamation-circle"></i>
+                        <span>Connection error.</span>
+                    </div>`;
+                setStatus('Error', 'red');
+            }
+
+            input.disabled = false;
+            sendBtn.disabled = false;
+            input.focus();
+        }
+
+        function addMessage(sender, text, isUser) {
+            const chatBox = document.getElementById('chatBox');
+            const div = document.createElement('div');
+            
+            div.className = `message ${isUser ? 'user' : 'assistant'}`;
+            
+            const icon = isUser 
+                ? '<i class="fa-solid fa-user"></i>'
+                : '<i class="fa-solid fa-robot"></i>';
+
+            div.innerHTML = `
+                <div class="message-avatar">${icon}</div>
+                <div class="message-content-wrapper">
+                    <div class="message-bubble">${text}</div>
+                    <p class="message-label">${isUser ? 'YOU' : 'ASSISTANT'}</p>
+                </div>
+            `;
+            
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return div;
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>

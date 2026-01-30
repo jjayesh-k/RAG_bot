@@ -7,7 +7,8 @@ import json
 import threading
 import re
 from werkzeug.utils import secure_filename
-from docling_parser import parse_hybrid_pdf
+from smart_parser import parse_hybrid_pdf
+# from docling_parser import parse_hybrid_pdf
 import tempfile
 from recursive_chunker import chunk_markdown
 from indexer import build_index_optimized, to_float16
@@ -91,8 +92,19 @@ def upload_files():
         except Exception as e:
             print(f"Error processing {filename}: {e}")
         finally:
-            if os.path.exists(file_path):
-                os.remove(file_path)
+            # Small delay to ensure all file handles are released (Windows issue)
+            time.sleep(0.1)
+            try:
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+            except PermissionError:
+                # If still locked, try again after a longer delay
+                time.sleep(0.5)
+                try:
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                except Exception as e:
+                    print(f"Warning: Could not delete {file_path}: {e}")
 
     with state.lock:
         state.all_chunks.extend(new_chunks)
@@ -107,9 +119,13 @@ def upload_files():
             print(f" CRITICAL INDEX ERROR: {e}")
             traceback.print_exc()
 
+    elapsed_time = time.time() - start_time
+    print(f"✅ Processing complete in {elapsed_time:.2f} seconds")
+
     return jsonify({
         "message": f"Added {len(new_chunks)} chunks. Total Memory: {len(state.all_chunks)} chunks.",
-        "count": len(state.all_chunks)
+        "count": len(state.all_chunks),
+        "processing_time": f"{elapsed_time:.2f}s"
     })
 
 @app.route('/chat', methods=['POST'])

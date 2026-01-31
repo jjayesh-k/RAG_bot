@@ -1,0 +1,42 @@
+[
+    {
+        "question": "What is the company policy regarding accepting gifts of cash or gold?",
+        "expected_files": ["Tata Code Of Conduct"],
+        "expected_phrases": ["cash", "gold", "precious metals", "never appropriate", "prohibited"]
+    },
+    {
+        "question": "I am an accountant planning to draw cartoons for a children's publication on weekends. Do I need permission?",
+        "expected_files": ["Tata Code Of Conduct"],
+        "expected_phrases": ["disclosure", "supervisor", "conflict of interest", "adversely affects"]
+    },
+    {
+        "question": "How does the company handle political donations and support for political parties?",
+        "expected_files": ["Tata Code Of Conduct"],
+        "expected_phrases": ["political non-alignment", "Progressive Electoral Trust", "do not support", "donations"]
+    },
+    {
+        "question": "What is Jayesh Kandar's current educational qualification and CGPA?",
+        "expected_files": ["Jayesh_Kandar_B033"],
+        "expected_phrases": ["Master of Science", "Data Science", "8.68", "NMIMS"]
+    },
+    {
+        "question": "Which company did Jayesh intern at for Cloud Data, and what were his responsibilities regarding AWS Config?",
+        "expected_files": ["Jayesh_Kandar_B033"],
+        "expected_phrases": ["AlgoAnalytics", "AWS Config rules", "tagging", "cost monitoring"]
+    },
+    {
+        "question": "Describe the 'Real-time Weather Report System' project.",
+        "expected_files": ["Jayesh_Kandar_B033"],
+        "expected_phrases": ["Azure Databricks", "Microsoft Fabric", "Kusto DB", "Power BI"]
+    },
+    {
+        "question": "Does the candidate have experience with Docker? If so, where was it used?",
+        "expected_files": ["Jayesh_Kandar_B033"],
+        "expected_phrases": ["Docker", "load testing", "AlgoAnalytics"]
+    },
+    {
+        "question": "What technologies were used in the AI Document Assistant (RAG) project for Tata Motors?",
+        "expected_files": ["Jayesh_Kandar_B033"],
+        "expected_phrases": ["Flask", "Ollama", "FAISS", "Docling", "PyMuPDF"]
+    }
+]

@@ -16,7 +16,7 @@ from config import EMBEDDING_MODEL, LANGUAGE_MODEL
 import sys
 import webbrowser
 from threading import Timer
-import traceback # Added for detailed error logs
+import traceback # Added for detailed error logs    
 
 # --- CONFIGURATION ---
 # Check if a settings.json file exists
@@ -128,128 +128,105 @@ def upload_files():
         "processing_time": f"{elapsed_time:.2f}s"
     })
 
+import re  # <--- ENSURE THIS IS IMPORTED AT THE TOP
+
+import re  # Ensure this is imported at top of file
+
 @app.route('/chat', methods=['POST'])
 def chat():
-    # DEBUG 1: Check if request hits the endpoint
-    print("\n--- [DEBUG] 1. Chat Endpoint Reached ---")
-    
+    # 1. Parse Data
+    data = request.json
+    query = data.get("message", "").strip()
+
+    # --- LEVEL 1: GREETINGS ---
+    if query.lower() in ['hi', 'hello', 'hey', 'greetings', 'hola']:
+        def simple_stream():
+            yield json.dumps({"type": "token", "content": "Hello! I am ready to answer questions about your uploaded documents."}) + "\n"
+        return Response(stream_with_context(simple_stream()), mimetype='application/x-ndjson')
+
     if not state.is_ready:
-        print(" System not ready")
         return jsonify({"error": "System not ready. Upload files first."}), 400
 
     try:
-        data = request.json
-        query = data.get("message", "")
-        print(f"--- Query: {query} ---")
+        # 2. Embedding
+        response = ollama.embed(model=EMBEDDING_MODEL, input=query)
+        embed_np = np.array(response['embeddings'][0]).reshape(1, -1)
 
-        # DEBUG 2: Check Embedding
-        print("--- [DEBUG] 2. Generatng Embedding... ---")
         with state.lock:
-            try:
-                response = ollama.embed(model=EMBEDDING_MODEL, input=query)
-                # Check if embedding exists
-                if not response.get('embeddings'):
-                    raise ValueError("Ollama returned no embeddings!")
-                
-                embed_list = response['embeddings'][0]
-                embed_np = np.array(embed_list).reshape(1, -1)
-                
-                print(f"--- [DEBUG] 3. Searching FAISS (Vector Dim: {embed_np.shape}) ---")
-                
-                # Check FAISS index status
-                if state.vector_index is None:
-                    raise ValueError("Vector Index is NONE!")
-                
-                D, I = state.vector_index.search(to_float16(embed_np), 30)
-                print(f"--- [DEBUG] 4. Search Complete. Found {len(I[0])} matches ---")
-                
-            except Exception as e:
-                print(f" VECTOR SEARCH FAILED: {e}")
-                traceback.print_exc()
-                return jsonify({"error": f"Internal Search Error: {str(e)}"}), 500
+            # Search deeper (Top 60) to find the right chunk across multiple files
+            D, I = state.vector_index.search(to_float16(embed_np), 60)
+            current_chunk_map = state.chunk_map.copy()
 
-        # Logic: Hybrid Scoring
+        # 3. SMART SCORING
         results = []
-        stop_words = {'what', 'is', 'explain', 'the', 'a', 'an', 'in', 'on', 'of', 'for', 'to', 'and', 'how', 'do', 'does', 'are'}
-        query_terms = set([w for w in query.lower().split() if w not in stop_words])
+        common_tech_words = {'python', 'project', 'system', 'using', 'data', 'technologies', 'used', 'application', 'developed'}
+        stop_words = {'what', 'is', 'the', 'a', 'an', 'in', 'of', 'for', 'to', 'and', 'how', 'do', 'does', 'are', 'tell', 'me'}
         
-        # Unpack FAISS results
+        words = re.findall(r'\w+', query.lower())
+        query_terms = [w for w in words if w not in stop_words and len(w) > 2]
+
         for idx, dist in zip(I[0], D[0]):
             if idx == -1: continue
-            
-            # Retrieve text
-            chunk_text = state.chunk_map.get(idx, "")
-            if not chunk_text: continue
-            
-            vector_score = 1 - dist
-            keyword_bonus = 0
-            
-            # Simple keyword matching for scoring
+            chunk_text = current_chunk_map.get(idx, "")
             chunk_lower = chunk_text.lower()
-            if any(q in chunk_lower for q in query_terms):
-                keyword_bonus = 0.3
-                
-            final_score = vector_score + keyword_bonus
-            results.append((idx, chunk_text, final_score))
+            
+            score = 1 - dist
+            
+            # Variable Boosting
+            for term in query_terms:
+                if term in chunk_lower:
+                    if term in common_tech_words:
+                        score += 0.5 
+                    else:
+                        score += 5.0 
+            
+            results.append((idx, chunk_text, float(score)))
 
-        # Sort and Expand
+        # Sort by Score
         results.sort(key=lambda x: x[2], reverse=True)
-        final_context_list = []
-        seen_indices = set()
-        
-        # Top 3 + Neighbors
-        for idx, txt, score in results[:3]:
-            if idx in seen_indices: continue
-            
-            # Add Anchor
-            final_context_list.append((txt, score))
-            seen_indices.add(idx)
-            
-            # Add Neighbor (Next Chunk)
-            next_idx = idx + 1
-            if next_idx in state.chunk_map and next_idx not in seen_indices:
-                 final_context_list.append((state.chunk_map[next_idx], score))
-                 seen_indices.add(next_idx)
 
-        print(f"--- [DEBUG] 5. Context Prepared: {len(final_context_list)} chunks ---")
-        
-        # Prepare Prompt
-        context_str = "\n\n".join([f"{txt}" for txt, _ in final_context_list])
-        
+        # 4. CONTEXT WINDOW (Expanded for Multi-Doc)
+        # CRITICAL FIX: Increased from 5 to 15 chunks.
+        # This ensures that even if the Resume takes the top 5 spots,
+        # the Policy chunks (at #6, #7...) will still be included.
+        top_k_chunks = results[:15]
+        top_k_chunks.sort(key=lambda x: x[0]) 
+
+        context_str = "\n\n".join([txt for _, txt, _ in top_k_chunks])
+
+        # 5. GENERATION
         def generate():
-            try:
-                # 1. Send Context Data to UI
-                context_data = [{"text": txt[:200]+"...", "score": 1.0} for txt, _ in final_context_list[:5]]
-                yield json.dumps({"type": "context", "data": context_data}) + "\n"
-                
-                # 2. Generate Answer
-                system_instruction = "You are a helpful AI assistant. Answer the question based ONLY on the context provided."
-                final_prompt = f"Context:\n{context_str}\n\nQuestion: {query}\n\nAnswer:"
-                
-                print("--- [DEBUG] 6. Starting Stream Generation... ---")
-                stream = ollama.chat(
-                    model=LANGUAGE_MODEL,
-                    messages=[{'role': 'user', 'content': final_prompt}],
-                    stream=True
-                )
-                
-                for chunk in stream:
-                    content = chunk['message']['content']
-                    if content:
-                        yield json.dumps({"type": "token", "content": content}) + "\n"
-                        
-                print("--- [DEBUG] 7. Stream Finished Successfully ---")
-                
-            except Exception as e:
-                print(f" GENERATION ERROR: {e}")
-                traceback.print_exc()
-                # Try to send error to UI
-                yield json.dumps({"type": "token", "content": f"\n[SYSTEM ERROR]: {str(e)}"}) + "\n"
+            context_data = [{"text": txt[:200]+"...", "score": score} for _, txt, score in top_k_chunks[:5]]
+            yield json.dumps({"type": "context", "data": context_data}) + "\n"
+
+            # --- SYSTEM PROMPT UPDATE ---
+            # We explicitly teach the AI to look at the [Filename] tag.
+            sys_msg = (
+                "You are an intelligent document assistant. The Context below contains chunks from multiple different files. "
+                "Each chunk starts with a tag like [Filename]. "
+                "1. Identify which document is relevant to the user's question. "
+                "2. If the user asks about 'Policy', ONLY use text from [Tata Code of Conduct]. Ignore [Resume]. "
+                "3. If the user asks about 'Jayesh' or 'Projects', ONLY use text from [Resume]. Ignore [Code of Conduct]. "
+                "4. If the answer is not in the correct document, say 'I don't know'."
+            )
+            user_msg = f"Context:\n{context_str}\n\nQuestion: {query}\n\nAnswer:"
+            
+            stream = ollama.chat(
+                model=LANGUAGE_MODEL,
+                messages=[{'role': 'system', 'content': sys_msg}, {'role': 'user', 'content': user_msg}],
+                stream=True,
+                options={"stop": ["Context:", "Question:", "User:", "System:", "\n\n\n"], "temperature": 0.1}
+            )
+
+            for chunk in stream:
+                content = chunk['message']['content']
+                if content:
+                    yield json.dumps({"type": "token", "content": content}) + "\n"
 
         return Response(stream_with_context(generate()), mimetype='application/x-ndjson')
 
     except Exception as e:
-        print(f" CRITICAL ROUTE ERROR: {e}")
+        print(f"ERROR: {e}")
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 

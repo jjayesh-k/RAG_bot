@@ -3,7 +3,7 @@ import json
 import numpy as np
 
 # --- CONFIGURATION ---
-API_URL = "http://127.0.0.1:8080/chat"
+API_URL = "http://127.0.0.1:5000/chat"
 GROUND_TRUTH_FILE = "ground_truth.json"
 K = 5  # We are checking the Top 5 results
 

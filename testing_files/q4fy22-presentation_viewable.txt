@@ -1,0 +1,867 @@
+
+--- [Page 1 | text | Chunk ID: 0] ---
+# **Tata Motors Group**
+
+##### Results for quarter and full year ended 31 [st] March 2022
+--------------------------------------------------------------------------------
+
+--- [Page 2 | text | Chunk ID: 1] ---
+2
+--------------------------------------------------------------------------------
+
+--- [Page 3 | text | Chunk ID: 2] ---
+## **Product and other highlights for the year – Tata Motors**
+
+
+
+$1 BN fund raise in its Passenger Electric
+Unveiled 21 new Commercial vehicles
+Vehicle business, first tranche complete
+across all segments
+
+
+
+Making strides in developing
+hydrogen fuel cell technology
+
+
+
+Launch of the all-new, revolutionary
+Ace EV, strong order book of 39,000
+units
+
+
+Unveiled AVINYA Concept –pure EV,
+
+based on GEN 3 architecture
+
+
+
+Power packed, PUNCH India’s first
+sub-compact SUV with 5 star adult
+safety rating
+
+
+
+Introduced advanced CNG
+technology in the Tiago and Tigor
+
+
+
+Showcased its Electric SUV Concept –
+
+CURVV#DifferentByDesign
+--------------------------------------------------------------------------------
+
+--- [Page 4 | text | Chunk ID: 3] ---
+## **Product and other highlights for the year – Jaguar Land Rover**
+
+
+
+Global chip shortage significantly
+constrained volumes
+
+
+
+New Range Rover launched
+
+
+
+Announced Science Based Targets to
+reduce carbon emissions
+
+
+
+Breakeven in Q4 below longer term
+350k annual target
+
+
+
+Record order bank of 168k JLR most improved OEM in J.D. Partnership announced with NVIDIA £1.4b of new long term funding in
+Power quality survey; Jaguar now in to provide state of the art FY22 to maintain strong liquidity
+top 5 in Premium connectivity and ADAS solutions
+
+
+
+4
+--------------------------------------------------------------------------------
+
+--- [Page 5 | text | Chunk ID: 4] ---
+## **Q4: Revenue ₹ 78.4KCr, EBITDA 11.2%, PBT(bei) ₹ 0.4KCr**
+##### Sequential recovery in margins despite semiconductor and inflation headwinds
+
+**FY22 | Consolidated | IndAS,** ₹ KCr
+--------------------------------------------------------------------------------
+
+--- [Page 5 | table | Chunk ID: 5] ---
+--- TABLE 1 ---
+
+Row 1:
+  • Col1: Global wholesales (K units)
+  • Q1 FY22: 213
+  • Q2 FY22: 252
+  • Q3 FY22: 286
+
+Row 2:
+  • Col1: Revenue | EBITDA (%) | EBIT (%) | PBT (bei) | FCF (Auto)
+  • Q1 FY22: 66.4 | 8.3% | -1.3% | (2.6) | (18.2)
+  • Q2 FY22: 61.4 | 8.4% | -1.5% | (3.5) | (3.2)
+  • Q3 FY22: 72.2 | 10.2% | 1.7% | (0.7) | 4.0
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 5 | table | Chunk ID: 6] ---
+--- TABLE 2 ---
+
+Row 1:
+  • Q4 FY22: 335
+  • Q4 FY21: 334
+  • Y-o-Y: 0.2%
+
+Row 2:
+  • Q4 FY22: 78.4 | 11.2% | 3.2% | 0.4 | 7.9
+  • Q4 FY21: 88.6 | 14.4% | 7.3% | 5.7 | 10.2
+  • Y-o-Y: (11.5%) | (320) Bps | (410) Bps
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 5 | table | Chunk ID: 7] ---
+--- TABLE 3 ---
+
+Row 1:
+  • FY22: 1,087
+  • FY21: 903
+  • Y-o-Y: 20.4%
+
+Row 2:
+  • FY22: 278.5 | 9.6% | 0.7% | (6.4) | (9.5)
+  • FY21: 249.8 | 12.2% | 2.6% | 3.3 | 5.3
+  • Y-o-Y: 11.5% | (260) Bps | (190) Bps
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 5 | text | Chunk ID: 8] ---
+##### **Volume & Revenue Profitability Cash Flow**
+
+
+
+
+- Sequential improvement in volumes
+
+
+- Q4 FY22 revenues lower 11.5% Y-o-Y
+
+on account of lower JLR volumes
+
+
+- Semi-conductor availability continues
+
+to impact volumes
+
+
+
+
+- Margins improve sequentially with
+volumes and profit actions
+
+
+- Y-o-Y margins impacted by commodity
+inflation and supply chain issues.
+
+
+
+
+- Positive FCF for second quarter in a row
+
+
+- For the year, auto free cash flow
+negative at ₹9.5 K Cr, primarily due to
+adverse working capital
+
+
+
+5
+--------------------------------------------------------------------------------
+
+--- [Page 6 | text | Chunk ID: 9] ---
+6
+--------------------------------------------------------------------------------
+
+--- [Page 7 | text | Chunk ID: 10] ---
+#### **JAGUAR LAND ROVER AUTOMOTIVE PLC**
+
+##### Results for the quarter and full year ended 31st March 2022
+
+
+
+**ADRIAN MARDELL**
+
+**Chief Financial Officer**
+
+
+
+7
+--------------------------------------------------------------------------------
+
+--- [Page 8 | text | Chunk ID: 11] ---
+## **Q4 cash flow positive, profitability flat QoQ**
+##### Higher sales, lower VME and warranty, offset by New Range Rover changeover and material cost
+
+**FY22** | IFRS, £m
+--------------------------------------------------------------------------------
+
+--- [Page 8 | table | Chunk ID: 12] ---
+--- TABLE 1 ---
+
+Row 1:
+  • Col1: Retails (K units)
+  • Q1 FY22: 124.5
+  • Q2 FY22: 92.7
+  • Q3 FY22: 80.1
+
+Row 2:
+  • Col1: Revenue (£m) | EBITDA (%) | EBIT (%) | PBT (bei) (£m)* | Free Cash flows(£m)
+  • Q1 FY22: 4,966 | 9.0% | (0.9)% | (110) | (996)
+  • Q2 FY22: 3,871 | 7.3% | (4.7)% | (302) | (664)
+  • Q3 FY22: 4,716 | 12.0% | 1.4% | (9) | 164
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 8 | table | Chunk ID: 13] ---
+--- TABLE 2 ---
+
+Row 1:
+  • Q4 FY22: 79.0
+  • Q4 FY21: 123.5
+  • Y-o-Y: (36.0)%
+
+Row 2:
+  • Q4 FY22: 4,767 | 12.6% | 2.0% | 9 | 340
+  • Q4 FY21: 6,538 | 15.3% | 7.5% | 534 | 729
+  • Y-o-Y: (27.1)% | (270) Bps | (550) bps
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 8 | table | Chunk ID: 14] ---
+--- TABLE 3 ---
+
+Row 1:
+  • FY22: 376.4
+  • FY21: 439.6
+  • Y-o-Y: (14.4)%
+
+Row 2:
+  • FY22: 18,320 | 10.3% | (0.4)% | (412) | (1,156)
+  • FY21: 19,731 | 12.8% | 2.6% | 662 | 185
+  • Y-o-Y: (7.2)% | (250) Bps | (300) bps
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 8 | text | Chunk ID: 15] ---
+- B e f o r e £ ( 4 3 ) m e x c e p t i o n a l i t e m f o r J L R R u s s i a i n Q 4 F Y 2 2 a n d £ ( 1, 5 2 3 ) m i n F Y 2 1, o f w h i c h £ ( 1, 4 8 6 ) m i n Q 4 F Y 2 1
+
+
+
+**8**
+--------------------------------------------------------------------------------
+
+--- [Page 9 | text | Chunk ID: 16] ---
+9
+--------------------------------------------------------------------------------
+
+--- [Page 10 | text | Chunk ID: 17] ---
+10
+--------------------------------------------------------------------------------
+
+--- [Page 11 | text | Chunk ID: 18] ---
+11
+--------------------------------------------------------------------------------
+
+--- [Page 12 | text | Chunk ID: 19] ---
+12
+--------------------------------------------------------------------------------
+
+--- [Page 13 | text | Chunk ID: 20] ---
+## **Profitability down YoY – primarily reflects semiconductor supply**
+##### Lower capitalisation, end of furlough, other costs and revaluation, offset by lower VME
+
+**FY22** | IFRS, £m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+612 (285)
+--------------------------------------------------------------------------------
+
+--- [Page 13 | table | Chunk ID: 21] ---
+--- TABLE 1 ---
+
+Row 1:
+  • Col1: EBIT | Margin | 2.6% | 0.9% | (1.6)% | (2.8)% | 0.5% | (0.4)%
+
+Row 2:
+  • Col1: EBIT | Margin | 2.6% | 0.9% | (1.6)% | (2.8)% | 0.5% | (0.4)%
+
+Row 3:
+  • Col1: * B e f o r e £ ( 4 3 ) m e x c e p t i o n a l i t e m i n Q 4 F Y 2 2 a n d £ ( 1, 5 2 3 ) m i n F Y 2 1, o f w h i c h £ ( 1, 4 8 6 ) m i n Q 4 F Y 2 1
+  • FY21 PBT Volume & Mix Net Pricing Contribution Costs Structural costs FX & commodities FY22 PBT: * B e f o r e £ ( 4 3 ) m e x c e p t i o n a l i t e m i n Q 4 F Y 2 2 a n d £ ( 1, 5 2 3 ) m i n F Y 2 1, o f w h i c h £ ( 1, 4 8 6 ) m i n Q 4 F Y 2 1
+  • Col3: * B e f o r e £ ( 4 3 ) m e x c e p t i o n a l i t e m i n Q 4 F Y 2 2 a n d £ ( 1, 5 2 3 ) m i n F Y 2 1, o f w h i c h £ ( 1, 4 8 6 ) m i n Q 4 F Y 2 1
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 13 | text | Chunk ID: 22] ---
+13
+--------------------------------------------------------------------------------
+
+--- [Page 14 | text | Chunk ID: 23] ---
+14
+--------------------------------------------------------------------------------
+
+--- [Page 15 | text | Chunk ID: 24] ---
+15
+--------------------------------------------------------------------------------
+
+--- [Page 16 | text | Chunk ID: 25] ---
+16
+--------------------------------------------------------------------------------
+
+--- [Page 17 | text | Chunk ID: 26] ---
+#### BUSINESS UPDATE
+
+
+
+17
+--------------------------------------------------------------------------------
+
+--- [Page 18 | text | Chunk ID: 27] ---
+## **Business environment continues to be challenging**
+##### Product, demand, pricing and cost opportunities to improve financial results in FY23
+
+
+
+Chip & other supply constraints
+requiring close management
+
+
+
+Covid lockdowns in China
+
+
+
+Inflation impact on JLR costs and
+consumer spending power
+
+
+
+Conflict in Ukraine
+
+
+
+Great new products Order bank grows to new record of
+168,000 units
+
+
+
+Opportunity to increase pricing to Breakeven in Q4 below longer term
+match customer demand 350k annual target
+
+
+
+18
+--------------------------------------------------------------------------------
+
+--- [Page 19 | text | Chunk ID: 28] ---
+19
+--------------------------------------------------------------------------------
+
+--- [Page 20 | text | Chunk ID: 29] ---
+20
+--------------------------------------------------------------------------------
+
+--- [Page 21 | text | Chunk ID: 30] ---
+21
+--------------------------------------------------------------------------------
+
+--- [Page 22 | text | Chunk ID: 31] ---
+22
+--------------------------------------------------------------------------------
+
+--- [Page 23 | text | Chunk ID: 32] ---
+23
+--------------------------------------------------------------------------------
+
+--- [Page 24 | text | Chunk ID: 33] ---
+24
+--------------------------------------------------------------------------------
+
+--- [Page 25 | text | Chunk ID: 34] ---
+25
+--------------------------------------------------------------------------------
+
+--- [Page 26 | text | Chunk ID: 35] ---
+## **Expect significant improvement in sales, profit, cash flow over FY23**
+##### Specific supply issues and Range Rover Sport changeover expected to limit improvement in Q1
+
+OUTLOOK (FY23)
+
+
+  - Ongoing supply challenges compounded by the conflict in Ukraine and China covid lockdowns
+
+
+  - Commodity inflation likely to remain at elevated levels
+
+
+  - Specific new supply chain issues (e.g. China lockdowns) and New Range Rover Sport changeover expected to limit volume
+increases in Q1 possibly resulting in negative EBIT and negative free cash flow in the quarter
+
+
+  - However, volumes expected to progressively increase thereafter and we target achieving a 5% EBIT margin and £1bn+
+positive free cash flow in FY23 for the full year
+
+
+  - Continue to target improving EBIT margin to double digits by FY26 and improving cash flow to achieve near zero net debt in
+FY24
+
+
+PRIORITIES
+
+
+  - Continue to engage with Tier 1 and chip suppliers to increase supply of chips and mitigate other supply chain disruptions
+
+
+  - Refocus savings, including price increases, of £1bn+ to offset cost inflation
+
+
+  - Successful launch and deliveries of the New Range Rover and New Range Rover Sport
+
+
+
+26
+--------------------------------------------------------------------------------
+
+--- [Page 27 | text | Chunk ID: 36] ---
+## Tata Commercial Vehicles Girish Wagh & PB Balaji
+
+(Incl u d e s Tata CV Indi a, Tata Cummin s JO result s and Tata CV Inter n a t i o n a l )
+--------------------------------------------------------------------------------
+
+--- [Page 28 | text | Chunk ID: 37] ---
+28
+--------------------------------------------------------------------------------
+
+--- [Page 29 | text | Chunk ID: 38] ---
+## **Market shares at 44.9% (+250bps vs FY21)**
+##### All segments gained market share in FY22
+
+**Tata Commercial Vehicles | Domestic market share**
+--------------------------------------------------------------------------------
+
+--- [Page 29 | table | Chunk ID: 39] ---
+--- TABLE 1 ---
+
+Row 1:
+  • Commercial Vehicles | 45.1% 43.0% 42.4% 44.9% | FY19 FY 20 FY 21 FY22: 45.1% | 43.0% | 42.4% | 44.9% | FY19 | FY 20 | FY 21 | FY22 | Commercial Vehicles
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 29 | text | Chunk ID: 40] ---
+29
+--------------------------------------------------------------------------------
+
+--- [Page 30 | text | Chunk ID: 41] ---
+## **Q4: Revenue ₹ 18.5KCr, EBITDA 5.9%, PBT(bei) ₹ 0.6 KCr**
+##### Q-o-Q margin improvement due to price hikes, improved mix, savings and stable steel prices
+
+**FY22 | Tata Commercial Vehicles | IndAS,** ₹ KCr
+--------------------------------------------------------------------------------
+
+--- [Page 30 | table | Chunk ID: 42] ---
+--- TABLE 1 ---
+
+Row 1:
+  • Col1: Global wholesales ( K units) | Revenue | EBITDA (%) | EBIT (%) | PBT (bei)
+  • Q1 FY22: 51.8 | 7.9 | 1.2% | -4.1% | (0.4)
+  • Q2 FY22: 89.7 | 12.1 | 3.2% | -0.3% | (0.1)
+  • Q3 FY22: 103.7 | 13.8 | 2.6% | -0.6% | (0.2)
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 30 | text | Chunk ID: 43] ---
+##### **Volume & Revenue**
+--------------------------------------------------------------------------------
+
+--- [Page 30 | table | Chunk ID: 44] ---
+--- TABLE 2 ---
+
+Row 1:
+  • Q4 FY22: 122.3 | 18.5 | 5.9% | 3.4% | 0.6
+  • Q4 FY21: 113.7 | 14.3 | 8.8% | 5.6% | 0.7
+  • Y-o-Y: 7.6% | 29.3% | (290) Bps | (220) Bps
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 30 | table | Chunk ID: 45] ---
+--- TABLE 3 ---
+
+Row 1:
+  • FY22: 367.5 | 52.3 | 3.7% | 0.4% | (0.1)
+  • FY21: 267.5 | 33.1 | 4.2% | -0.9% | (0.5)
+  • Y-o-Y: 37.4% | 57.9% | (50) Bps | 130 Bps
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 30 | text | Chunk ID: 46] ---
+##### **Profitability**
+
+
+
+
+- Rebound in volumes lead by MHCV after a decline over 2 years
+
+
+- Strong 34% Revenue growth Q-o-Q lead by MHCV and ILCV segments.
+
+
+- Y-o-Y Revenue growth at 29% > Volume Growth at 8% driven by
+
+  - _improved mix_
+
+  - _~ 8% pricing to partially offset commodity inflation_
+
+
+
+
+- EBITDA lower 290 bps Y-o-Y, impacted on account of
+commodity headwinds.
+
+
+- EBITDA margins affected due to commodity prices, impact
+lower on PBT(bei) due to operating leverage from higher
+revenues.
+
+
+
+30
+--------------------------------------------------------------------------------
+
+--- [Page 31 | text | Chunk ID: 47] ---
+31
+--------------------------------------------------------------------------------
+
+--- [Page 32 | text | Chunk ID: 48] ---
+_MHCV: Medium and heavy Commercial vehicles_ _ILCV: Intermediate and Light Commercial vehicles_ _SCV: Small commercial vehicles_
+
+
+
+32
+--------------------------------------------------------------------------------
+
+--- [Page 33 | text | Chunk ID: 49] ---
+33
+--------------------------------------------------------------------------------
+
+--- [Page 34 | text | Chunk ID: 50] ---
+## Tata Passenger Vehicles Shailesh Chandra & PB Balaji
+
+(Incl u d e s Tata PV, E V Indi a, FIAPL JO r esul t s and Inter n a t i o n a l busi n e s s( P V +E V ))
+
+
+
+34
+--------------------------------------------------------------------------------
+
+--- [Page 35 | text | Chunk ID: 51] ---
+35
+--------------------------------------------------------------------------------
+
+--- [Page 36 | text | Chunk ID: 52] ---
+36
+--------------------------------------------------------------------------------
+
+--- [Page 37 | text | Chunk ID: 53] ---
+## **Q4: Revenue ₹ 10.5 KCr, EBITDA 6.9%, EBIT breakeven delivered**
+##### Strong turnaround continues
+
+**FY22 | Tata Passenger Vehicles | IndAS,** ₹ KCr
+--------------------------------------------------------------------------------
+
+--- [Page 37 | table | Chunk ID: 54] ---
+--- TABLE 1 ---
+
+Row 1:
+  • Col1: Global wholesales ( K units) | Revenue | EBITDA (%) | EBIT (%) | PBT (bei)
+  • Q1 FY22: 64.6 | 5.2 | 4.1% | -6.6% | (0.4)
+  • Q2 FY22: 84.4 | 7.3 | 6.1% | -1.6% | (0.2)
+  • Q3 FY22: 99.4 | 8.5 | 3.2% | -3.6% | (0.3)
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 37 | table | Chunk ID: 55] ---
+--- TABLE 2 ---
+
+Row 1:
+  • Q4 FY22: 123.6 | 10.5 | 6.9% | 1.2% | 0.04
+  • Q4 FY21: 84.2 | 6.5 | 5.0% | -2.8% | (0.2)
+  • Y-o-Y: 46.8% | 62.0% | 190 bps | 400 bps
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 37 | table | Chunk ID: 56] ---
+--- TABLE 3 ---
+
+Row 1:
+  • FY22: 372.2 | 31.5 | 5.3% | -2.0% | (0.9)
+  • FY21: 222.6 | 16.6 | 2.0% | -9.5% | (1.7)
+  • Y-o-Y: 67.2% | 89.8% | 330 bps | 750 bps
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 37 | text | Chunk ID: 57] ---
+##### **Volume & Revenue Profitability**
+
+
+
+
+- Record revenues and growth lead by highest ever annual, quarterly and
+monthly (March 22) sales.
+
+
+- Strong demand for “New Forever” range and agile actions taken on the
+supply side driving volumes growth
+
+
+- EV continues to build strong momentum
+
+
+
+
+- Margin recovery lead by strong revenue growth (62% growth Y-oY), positive mix and realizations
+
+
+- EBIT breakeven achieved in Q4 FY22. Strong 750 Bps improvement
+in EBIT in FY22.
+
+
+- PV delivers positive cash flows. Business expected to remain self
+sustaining despite step up in investments from FY23
+
+
+
+37
+--------------------------------------------------------------------------------
+
+--- [Page 38 | text | Chunk ID: 58] ---
+38
+--------------------------------------------------------------------------------
+
+--- [Page 39 | text | Chunk ID: 59] ---
+39
+--------------------------------------------------------------------------------
+
+--- [Page 40 | text | Chunk ID: 60] ---
+## **Tata Motors (CV+PV)**
+
+
+ - _TML, TMPVL, TPEML and Joint operations TCL and FIAPL._
+
+
+
+40
+--------------------------------------------------------------------------------
+
+--- [Page 41 | text | Chunk ID: 61] ---
+41
+--------------------------------------------------------------------------------
+
+--- [Page 42 | text | Chunk ID: 62] ---
+42
+--------------------------------------------------------------------------------
+
+--- [Page 43 | text | Chunk ID: 63] ---
+43
+--------------------------------------------------------------------------------
+
+--- [Page 44 | text | Chunk ID: 64] ---
+44
+--------------------------------------------------------------------------------
+
+--- [Page 45 | text | Chunk ID: 65] ---
+##### Please submit your questions in the Q&A textbox Please mention your name and name of the organization you represent along with the questions
+
+
+
+45
+--------------------------------------------------------------------------------
+
+--- [Page 46 | text | Chunk ID: 66] ---
+## **Tata Motors Group : Additional details**
+
+##### Results for the year ended 31 [st] March 2022
+
+
+
+46
+--------------------------------------------------------------------------------
+
+--- [Page 47 | text | Chunk ID: 67] ---
+47
+--------------------------------------------------------------------------------
+
+--- [Page 48 | text | Chunk ID: 68] ---
+48
+--------------------------------------------------------------------------------
+
+--- [Page 49 | text | Chunk ID: 69] ---
+49
+--------------------------------------------------------------------------------
+
+--- [Page 50 | text | Chunk ID: 70] ---
+50
+--------------------------------------------------------------------------------
+
+--- [Page 51 | text | Chunk ID: 71] ---
+51
+--------------------------------------------------------------------------------
+
+--- [Page 52 | text | Chunk ID: 72] ---
+52
+--------------------------------------------------------------------------------
+
+--- [Page 53 | text | Chunk ID: 73] ---
+**53**
+--------------------------------------------------------------------------------
+
+--- [Page 54 | text | Chunk ID: 74] ---
+**54**
+--------------------------------------------------------------------------------
+
+--- [Page 55 | text | Chunk ID: 75] ---
+**55**
+--------------------------------------------------------------------------------
+
+--- [Page 56 | text | Chunk ID: 76] ---
+## **China JV achieves positive EBIT margin in Q4 despite chip constraints**
+
+**Q4 FY22** | IFRS, £m
+--------------------------------------------------------------------------------
+
+--- [Page 56 | table | Chunk ID: 77] ---
+--- TABLE 1 ---
+
+Row 1:
+  • (Presented on 100% basis): Retail volumes ('000 units)
+  • Q4 | FY21: 15.9
+  • Q3 | FY22: 13.7
+  • Q4 | FY22: 11.0
+  • Col5: 11.0
+  • FY21: 64.3
+  • FY22: 54.0
+  • Col8: 4.9
+  • Q4 v Q4 | YoY | Change: 2.7
+  • Q3 v Q4 | QoQ | Change: 10.3
+
+Row 2:
+  • (Presented on 100% basis): Wholesale volumes ('000 units)
+  • Q4 | FY21: 13.8
+  • Q3 | FY22: 13.9
+  • Q4 | FY22: 12.6
+  • Col5: 65.3
+  • FY21: 53.5
+  • FY22: 1.2
+  • Col8: 1.3
+  • Q4 v Q4 | YoY | Change: 11.8
+
+Row 3:
+  • (Presented on 100% basis): Revenues
+  • Q4 | FY21: 489
+  • Q3 | FY22: 450
+  • Q4 | FY22: 489
+  • Col5: 2,309
+  • FY21: 2,017
+  • FY22: -
+  • Col8: (39)
+  • Q4 v Q4 | YoY | Change: 292
+
+Row 4:
+  • (Presented on 100% basis): Profit/(Loss) – before tax
+  • Q4 | FY21: (26)
+  • Q3 | FY22: (40)
+  • Q4 | FY22: 11
+  • Col5: (114)
+  • FY21: (63)
+  • FY22: (37)
+  • Col8: (51)
+  • Q4 v Q4 | YoY | Change: (51)
+
+Row 5:
+  • (Presented on 100% basis): Profit/(Loss) – after tax
+  • Q4 | FY21: (19)
+  • Q3 | FY22: (30)
+  • Q4 | FY22: 7
+  • Col5: (83)
+  • FY21: (43)
+  • FY22: (26)
+  • Col8: (37)
+  • Q4 v Q4 | YoY | Change: (40)
+
+Row 6:
+  • (Presented on 100% basis): EBITDA Margin
+  • Q4 | FY21: 6.0%
+  • Q3 | FY22: 2.0%
+  • Q4 | FY22: 14.0%
+  • Col5: 5.0%
+  • FY21: 8.0%
+  • FY22: (8.0%)
+  • Col8: (12.0%)
+  • Q4 v Q4 | YoY | Change: (3.0%)
+
+Row 7:
+  • (Presented on 100% basis): EBIT Margin
+  • Q4 | FY21: (5.3%)
+  • Q3 | FY22: (9.0%)
+  • Q4 | FY22: 2.2%
+  • Col5: (4.9%)
+  • FY21: (3.1%)
+  • FY22: (7.6%)
+  • Col8: (11.2%)
+  • Q4 v Q4 | YoY | Change: (1.8%)
+
+--- END TABLE ---
+--------------------------------------------------------------------------------
+
+--- [Page 56 | text | Chunk ID: 78] ---
+56
+--------------------------------------------------------------------------------
+
+--- [Page 57 | text | Chunk ID: 79] ---
+57
+--------------------------------------------------------------------------------

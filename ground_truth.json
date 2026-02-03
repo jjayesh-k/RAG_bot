@@ -1,42 +1,286 @@
-[
+{
+  "test_questions": [
     {
-        "question": "What is the company policy regarding accepting gifts of cash or gold?",
-        "expected_files": ["Tata Code Of Conduct"],
-        "expected_phrases": ["cash", "gold", "precious metals", "never appropriate", "prohibited"]
+      "id": 1,
+      "category": "Code of Conduct - Values",
+      "difficulty": "easy",
+      "question": "What are the five core values of Tata as stated in the Code of Conduct?",
+      "ground_truth": "The five core Tata values are: Integrity, Excellence, Pioneering, Unity, and Responsibility. These values underpin the way Tata conducts business activities and serve as the foundation for the Tata Code of Conduct.",
+      "document_source": "Tata_Code_Of_Conduct.pdf",
+      "expected_context_keywords": ["integrity", "excellence", "pioneering", "unity", "responsibility", "values"],
+      "evaluation_notes": "Should retrieve exact list from page 4 of Code of Conduct"
     },
     {
-        "question": "I am an accountant planning to draw cartoons for a children's publication on weekends. Do I need permission?",
-        "expected_files": ["Tata Code Of Conduct"],
-        "expected_phrases": ["disclosure", "supervisor", "conflict of interest", "adversely affects"]
+      "id": 2,
+      "category": "Code of Conduct - Ethics",
+      "difficulty": "medium",
+      "question": "According to the Tata Code of Conduct, what is the company's stance on bribery and corruption?",
+      "ground_truth": "Tata does not tolerate bribery or corruption in any form. The company is committed to operating businesses conforming to the highest moral and ethical standards. Employees and those representing Tata, including agents and intermediaries, shall not, directly or indirectly, offer or receive any illegal or improper payments or comparable benefits intended or perceived to obtain undue favors.",
+      "document_source": "Tata_Code_Of_Conduct.pdf",
+      "expected_context_keywords": ["bribery", "corruption", "ethical", "illegal", "improper payments"],
+      "evaluation_notes": "Tests understanding of core ethical principles"
     },
     {
-        "question": "How does the company handle political donations and support for political parties?",
-        "expected_files": ["Tata Code Of Conduct"],
-        "expected_phrases": ["political non-alignment", "Progressive Electoral Trust", "do not support", "donations"]
+      "id": 3,
+      "category": "Code of Conduct - Employees",
+      "difficulty": "medium",
+      "question": "What types of gifts are never appropriate to give or accept according to the Tata Code of Conduct?",
+      "ground_truth": "The following gifts are never appropriate: gifts of cash, gold, or other precious metals, gems or stones; gifts prohibited under applicable law; gifts in the nature of a bribe, payoff, kickback or facilitation payment; gifts prohibited by the giver's or recipient's organization; and gifts in the form of services or other non-cash benefits such as a promise of employment.",
+      "document_source": "Tata_Code_Of_Conduct.pdf",
+      "expected_context_keywords": ["cash", "gold", "precious metals", "bribe", "facilitation payment", "kickback"],
+      "evaluation_notes": "Tests specific policy knowledge about gifts and hospitality"
     },
     {
-        "question": "What is Jayesh Kandar's current educational qualification and CGPA?",
-        "expected_files": ["Jayesh_Kandar_B033"],
-        "expected_phrases": ["Master of Science", "Data Science", "8.68", "NMIMS"]
+      "id": 4,
+      "category": "Financial Performance - JLR",
+      "difficulty": "easy",
+      "question": "What was Jaguar Land Rover's EBIT margin in Q4 FY22?",
+      "ground_truth": "Jaguar Land Rover's EBIT margin in Q4 FY22 was 2.0%.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["EBIT", "2.0%", "Q4", "FY22", "JLR"],
+      "evaluation_notes": "Tests precise numerical data retrieval from financial tables"
     },
     {
-        "question": "Which company did Jayesh intern at for Cloud Data, and what were his responsibilities regarding AWS Config?",
-        "expected_files": ["Jayesh_Kandar_B033"],
-        "expected_phrases": ["AlgoAnalytics", "AWS Config rules", "tagging", "cost monitoring"]
+      "id": 5,
+      "category": "Financial Performance - JLR",
+      "difficulty": "hard",
+      "question": "How did JLR's profitability change from Q3 FY22 to Q4 FY22, and what were the main factors?",
+      "ground_truth": "JLR's EBIT increased from 1.4% in Q3 FY22 to 2.0% in Q4 FY22, with PBT improving from negative £9m to positive £9m. The main factors were: higher wholesales, lower VME (vehicle material expenses) and warranty costs. However, these improvements were offset by the New Range Rover changeover (which reduced wholesales by 7k units) and increased material costs.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["Q3", "Q4", "wholesales", "VME", "warranty", "Range Rover", "material cost"],
+      "evaluation_notes": "Tests multi-hop reasoning across multiple data points"
     },
     {
-        "question": "Describe the 'Real-time Weather Report System' project.",
-        "expected_files": ["Jayesh_Kandar_B033"],
-        "expected_phrases": ["Azure Databricks", "Microsoft Fabric", "Kusto DB", "Power BI"]
+      "id": 6,
+      "category": "Financial Performance - Consolidated",
+      "difficulty": "medium",
+      "question": "What were the consolidated global wholesales for Tata Motors Group in Q4 FY22 and how did this compare year-over-year?",
+      "ground_truth": "The consolidated global wholesales for Tata Motors Group in Q4 FY22 were 335K units, which was up 0.2% year-over-year compared to Q4 FY21's 334K units. For the full year FY22, wholesales were 1,087K units, up 20.4% from FY21's 903K units.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["335", "334", "0.2%", "wholesales", "Q4", "FY22"],
+      "evaluation_notes": "Tests comparative analysis across time periods"
     },
     {
-        "question": "Does the candidate have experience with Docker? If so, where was it used?",
-        "expected_files": ["Jayesh_Kandar_B033"],
-        "expected_phrases": ["Docker", "load testing", "AlgoAnalytics"]
+      "id": 7,
+      "category": "Financial Performance - Commercial Vehicles",
+      "difficulty": "medium",
+      "question": "What was Tata Commercial Vehicles' market share in FY22 and how did it change from FY21?",
+      "ground_truth": "Tata Commercial Vehicles' market share in FY22 was 44.9%, which increased by 250 basis points (2.5 percentage points) from FY21's 42.4%. The company gained market share across all segments.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["44.9%", "42.4%", "250 bps", "market share", "Commercial Vehicles"],
+      "evaluation_notes": "Tests understanding of market position and changes"
     },
     {
-        "question": "What technologies were used in the AI Document Assistant (RAG) project for Tata Motors?",
-        "expected_files": ["Jayesh_Kandar_B033"],
-        "expected_phrases": ["Flask", "Ollama", "FAISS", "Docling", "PyMuPDF"]
+      "id": 8,
+      "category": "Financial Performance - Passenger Vehicles",
+      "difficulty": "easy",
+      "question": "What was Tata Passenger Vehicles' domestic market share in Q4 FY22?",
+      "ground_truth": "Tata Passenger Vehicles' domestic market share in Q4 FY22 was 13.4%.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["13.4%", "market share", "Q4 FY22", "Passenger Vehicles"],
+      "evaluation_notes": "Tests basic data retrieval"
+    },
+    {
+      "id": 9,
+      "category": "Strategic Initiatives - JLR",
+      "difficulty": "hard",
+      "question": "What challenges did JLR face in FY22 and what is their outlook for FY23?",
+      "ground_truth": "JLR faced significant challenges including global chip shortage that constrained volumes, commodity inflation, and Covid lockdowns in China. For FY23, they expect continued supply challenges and commodity inflation. Specific supply issues and Range Rover Sport changeover are expected to limit Q1 FY23 improvement, possibly resulting in negative EBIT and cash flow in that quarter. However, they target achieving 5% EBIT margin and £1bn+ positive free cash flow for full year FY23, with progressive volume increases after Q1.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["chip shortage", "inflation", "China", "FY23", "5% EBIT", "£1bn", "cash flow"],
+      "evaluation_notes": "Tests understanding of challenges and forward-looking strategy"
+    },
+    {
+      "id": 10,
+      "category": "Strategic Initiatives - EV",
+      "difficulty": "medium",
+      "question": "How did Tata's electric vehicle business perform in FY22?",
+      "ground_truth": "Tata's EV business showed exponential growth with 3.2X increase in FY22. Wholesales reached 19,105 units in FY22 compared to 4,218 units in FY21. In Q4 FY22, sales crossed 9,000 units with market share of 94% and EV penetration at 7.4%. The company expanded to 143 dealerships across 75 cities and installed 2,000 charging points.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["3.2X", "19,105", "94%", "7.4%", "EV", "electric vehicle", "charging"],
+      "evaluation_notes": "Tests understanding of EV business growth metrics"
+    },
+    {
+      "id": 11,
+      "category": "Code of Conduct - Conflicts of Interest",
+      "difficulty": "hard",
+      "question": "If an employee is in a romantic relationship with a colleague who now reports to them, what should they do according to the Code of Conduct?",
+      "ground_truth": "According to the Code of Conduct, romantic or close personal relationships with another employee where a reporting relationship exists and one is responsible for evaluating the other's performance is likely to create a conflict of interest. In such a situation, the employee would need to report the potential conflict to their supervisor.",
+      "document_source": "Tata_Code_Of_Conduct.pdf",
+      "expected_context_keywords": ["romantic", "relationship", "reporting", "conflict of interest", "supervisor"],
+      "evaluation_notes": "Tests understanding of practical application of conflict of interest policies"
+    },
+    {
+      "id": 12,
+      "category": "Code of Conduct - Information Security",
+      "difficulty": "medium",
+      "question": "Can an employee share approximate revenue figures of the company with friends during casual conversation?",
+      "ground_truth": "No. According to the Code of Conduct, employees are not permitted to share financial information of the company with others who do not need to know this information. Financial information should always be safeguarded and disclosed only on a need-to-know basis after obtaining requisite approvals. Sharing of any price sensitive information that is not generally available with the public could also lead to violation of applicable insider trading laws.",
+      "document_source": "Tata_Code_Of_Conduct.pdf",
+      "expected_context_keywords": ["financial information", "need-to-know", "insider trading", "price sensitive"],
+      "evaluation_notes": "Tests understanding of information security and insider trading policies"
+    },
+    {
+      "id": 13,
+      "category": "Financial Performance - Refocus Program",
+      "difficulty": "medium",
+      "question": "What was the value contribution of JLR's Refocus program in FY22 and what is the target for FY23?",
+      "ground_truth": "JLR's Refocus program delivered £1.5 billion of value in FY22, with £300m contributed in Q4. For FY23, the target is £1 billion+ of Refocus savings to offset cost inflation, including market performance improvements, cost reductions, and pricing actions.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["Refocus", "£1.5 billion", "£1 billion", "FY22", "FY23", "savings"],
+      "evaluation_notes": "Tests understanding of transformation initiatives"
+    },
+    {
+      "id": 14,
+      "category": "Strategic Initiatives - Products",
+      "difficulty": "easy",
+      "question": "What new Range Rover model was launched in FY22 and what is expected in Q2 FY23?",
+      "ground_truth": "The new Range Rover was launched in FY22 with a record order bank that increased from 31k to 46k units. The New Range Rover Sport was revealed on 10 May 2022 with sales expected from Q2 FY23. It's the third generation of Range Rover Sport built on the MLA architecture at Solihull.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["Range Rover", "Range Rover Sport", "Q2 FY23", "order bank", "MLA"],
+      "evaluation_notes": "Tests product launch timeline knowledge"
+    },
+    {
+      "id": 15,
+      "category": "Financial Performance - Cash Flow",
+      "difficulty": "hard",
+      "question": "What was JLR's free cash flow in Q4 FY22 and what were the main drivers of full-year cash outflow?",
+      "ground_truth": "JLR's free cash flow was positive £340m in Q4 FY22, up from £164m in Q3. However, for the full year FY22, there was a cash outflow of £1,156m, which was primarily explained by volume-related working capital outflow. Despite this, JLR maintained strong liquidity of £6.4bn at 31 March 2022.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["£340m", "£1,156m", "cash flow", "working capital", "liquidity", "£6.4bn"],
+      "evaluation_notes": "Tests understanding of cash flow dynamics"
+    },
+    {
+      "id": 16,
+      "category": "Resume Analysis - Skills",
+      "difficulty": "easy",
+      "question": "What are the main technical skills listed in Jayesh Kandar's resume?",
+      "ground_truth": "Jayesh Kandar's main technical skills include: Python, SQL, Statistics, PowerBI, PowerPoint, Excel, AWS, Machine Learning, and Docker.",
+      "document_source": "Jayesh_Kandar_B033.pdf",
+      "expected_context_keywords": ["Python", "SQL", "PowerBI", "AWS", "Machine Learning", "Docker"],
+      "evaluation_notes": "Tests basic information extraction from resume"
+    },
+    {
+      "id": 17,
+      "category": "Resume Analysis - Projects",
+      "difficulty": "medium",
+      "question": "Describe Jayesh Kandar's AI Document Assistant (RAG) project and its key features.",
+      "ground_truth": "Jayesh developed a local, privacy-focused RAG application for Tata Motors using Flask, Ollama, and FAISS. The project enables semantic search across multiple PDF/TXT documents, implements hybrid PDF parsing (Docling/PyMuPDF) and recursive chunking to optimize retrieval accuracy on consumer hardware (CPU-only), and integrates context-aware indexing to handle multi-file queries with high precision. The project ran from December 2025 to January 2026.",
+      "document_source": "Jayesh_Kandar_B033.pdf",
+      "expected_context_keywords": ["RAG", "Flask", "Ollama", "FAISS", "PDF parsing", "Tata Motors", "semantic search"],
+      "evaluation_notes": "Tests detailed project understanding from resume"
+    },
+    {
+      "id": 18,
+      "category": "Resume Analysis - Education",
+      "difficulty": "easy",
+      "question": "What is Jayesh Kandar's current educational qualification and CGPA?",
+      "ground_truth": "Jayesh Kandar is currently pursuing a Master of Science in Data Science (2024-Present) from Nilkamal School of Mathematics, Applied Statistics and Analytics, SVKM's NMIMS, Mumbai with a CGPA of 8.68/10.",
+      "document_source": "Jayesh_Kandar_B033.pdf",
+      "expected_context_keywords": ["Master of Science", "Data Science", "NMIMS", "8.68", "CGPA"],
+      "evaluation_notes": "Tests educational background extraction"
+    },
+    {
+      "id": 19,
+      "category": "Resume Analysis - Experience",
+      "difficulty": "medium",
+      "question": "What were Jayesh Kandar's main responsibilities during his internship at Virtual Sense Global Technologies?",
+      "ground_truth": "During his Data Science Intern role (Nov 2023 - May 2024) at Virtual Sense Global Technologies, Jayesh collected and processed over 5 million multi-source sensor readings for anomaly detection, automated data cleaning and standardization pipelines using Python (cutting manual processing time by 60%), and collaborated with hardware and QA teams to calibrate sensor outputs with ground truth via Kubios software, increasing validation accuracy by 20%.",
+      "document_source": "Jayesh_Kandar_B033.pdf",
+      "expected_context_keywords": ["Virtual Sense", "sensor readings", "data cleaning", "Python", "60%", "Kubios"],
+      "evaluation_notes": "Tests detailed work experience comprehension"
+    },
+    {
+      "id": 20,
+      "category": "Cross-Document - Code of Conduct Application",
+      "difficulty": "hard",
+      "question": "Based on the Tata Code of Conduct and JLR's business challenges, how should JLR handle relationships with semiconductor suppliers during the chip shortage?",
+      "ground_truth": "According to the Tata Code of Conduct, suppliers should be selected fairly and transparently, and Tata works with suppliers who share similar values and ethical standards. Despite the chip shortage challenge that JLR faced in FY22, they should not offer improper payments or benefits to obtain undue favors. Instead, JLR pursued the ethical approach mentioned in the presentation: actively engaging with suppliers to secure incremental supply and conducting strategic discussions with semiconductor suppliers to secure long-term supply agreements for future product programs.",
+      "document_source": "Tata_Code_Of_Conduct.pdf, q4fy22-presentation.pdf",
+      "expected_context_keywords": ["suppliers", "ethical", "chip shortage", "fair", "transparent", "long-term agreements"],
+      "evaluation_notes": "Tests cross-document reasoning and application of principles to real scenarios"
+    },
+    {
+      "id": 21,
+      "category": "Financial Performance - Margins",
+      "difficulty": "hard",
+      "question": "Compare the EBITDA margins across Tata's business segments in Q4 FY22.",
+      "ground_truth": "In Q4 FY22, EBITDA margins varied significantly across Tata's business segments: JLR had 12.6% EBITDA margin, Tata Commercial Vehicles had 5.9% margin, and Tata Passenger Vehicles had 6.9% margin. The consolidated EBITDA margin was 11.2%. JLR had the highest margins despite challenges from semiconductor shortages.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["EBITDA", "12.6%", "5.9%", "6.9%", "11.2%", "margins", "Q4 FY22"],
+      "evaluation_notes": "Tests comparative analysis across business segments"
+    },
+    {
+      "id": 22,
+      "category": "Strategic Initiatives - Sustainability",
+      "difficulty": "medium",
+      "question": "What sustainability initiatives did JLR announce in FY22?",
+      "ground_truth": "JLR announced Science Based Targets to reduce carbon emissions and partnered with NVIDIA to provide state-of-the-art connectivity and ADAS (Advanced Driver Assistance Systems) solutions. Additionally, electrification mix increased to 66% for the year, with BEV, PHEV, and MHEV powertrains.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["Science Based Targets", "carbon emissions", "NVIDIA", "electrification", "66%"],
+      "evaluation_notes": "Tests understanding of sustainability strategy"
+    },
+    {
+      "id": 23,
+      "category": "Financial Performance - Investment",
+      "difficulty": "medium",
+      "question": "What was JLR's total investment spending in Q4 FY22 and what is the target for FY23?",
+      "ground_truth": "JLR's total investment spending in Q4 FY22 was £469m, with £339m in total R&D (£98m capitalised and £241m expensed) and £130m in capital investment. The engineering capitalisation rate was 29%. For FY23, target investment spending is approximately £2.6bn.",
+      "document_source": "q4fy22-presentation.pdf",
+      "expected_context_keywords": ["£469m", "£2.6bn", "R&D", "capitalisation", "29%", "investment"],
+      "evaluation_notes": "Tests understanding of capital allocation and R&D spending"
+    },
+    {
+      "id": 24,
+      "category": "Code of Conduct - Political Stance",
+      "difficulty": "medium",
+      "question": "What is Tata's policy on political contributions and political alignment?",
+      "ground_truth": "Tata maintains political non-alignment and does not support any specific political party or candidate for political office. The company does not offer or give any company funds or property as donations to any specific political party, candidate or campaign. Any financial contributions to strengthen democratic forces through a clean electoral process are extended only through the Progressive Electoral Trust in India, or by a similar transparent, duly-authorized, non-discriminatory and non-discretionary vehicle outside India.",
+      "document_source": "Tata_Code_Of_Conduct.pdf",
+      "expected_context_keywords": ["political", "non-alignment", "Progressive Electoral Trust", "donations", "neutral"],
+      "evaluation_notes": "Tests understanding of political neutrality policy"
+    },
+    {
+      "id": 25,
+      "category": "Code of Conduct - Whistleblowing",
+      "difficulty": "medium",
+      "question": "What protections does the Tata Code of Conduct provide for employees who raise concerns?",
+      "ground_truth": "The Code provides several protections: Tata does not tolerate any form of retaliation against anyone reporting legitimate concerns. Anyone involved in targeting such a person will be subject to disciplinary action. The company strives to create an environment free from fear of retribution. No one shall be punished or made to suffer for raising concerns or making disclosures in good faith or in the public interest. Multiple avenues are provided for raising concerns including line managers, HR, ethics officials, and confidential reporting helplines.",
+      "document_source": "Tata_Code_Of_Conduct.pdf",
+      "expected_context_keywords": ["retaliation", "whistleblower", "good faith", "protection", "confidential reporting"],
+      "evaluation_notes": "Tests understanding of whistleblower protection mechanisms"
     }
-]
+  ],
+  "metadata": {
+    "total_questions": 25,
+    "documents_covered": [
+      "Tata_Code_Of_Conduct.pdf",
+      "q4fy22-presentation.pdf", 
+      "Jayesh_Kandar_B033.pdf"
+    ],
+    "difficulty_distribution": {
+      "easy": 6,
+      "medium": 13,
+      "hard": 6
+    },
+    "category_distribution": {
+      "Code of Conduct": 8,
+      "Financial Performance": 10,
+      "Strategic Initiatives": 4,
+      "Resume Analysis": 4,
+      "Cross-Document": 1
+    },
+    "evaluation_criteria": {
+      "context_recall": "Should retrieve all relevant context containing ground truth",
+      "context_precision": "Should not retrieve irrelevant contexts",
+      "faithfulness": "Answer should be based only on retrieved contexts",
+      "answer_relevancy": "Answer should directly address the question"
+    },
+    "passing_thresholds": {
+      "context_recall": 0.7,
+      "context_precision": 0.7,
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.7
+    }
+  }
+}

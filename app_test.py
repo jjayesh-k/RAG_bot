@@ -75,33 +75,46 @@ def perform_hybrid_search(query, k=60):
         final_scores = {}
         RRF_K = 60
         
-        # Define High-Priority "Red Flag" keywords
-        # If the query contains these, we boost chunks that ALSO contain them.
         red_flags = ["political", "donation", "bribe", "gift", "trust", "conflict", "relative"]
         active_flags = [word for word in red_flags if word in query.lower()]
 
-        # Helper to calculate boost
         def get_boost(chunk_idx):
             if not active_flags: return 0.0
             text = state.chunk_map.get(chunk_idx, "").lower()
-            # If the chunk contains the specific flag asked about, give massive boost
-            return 0.05 if any(flag in text for flag in active_flags) else 0.0
+            return 0.15 if any(flag in text for flag in active_flags) else 0.0
 
-        # Process Vector Ranks
         for rank, idx in enumerate(I[0]):
             if idx == -1: continue
             if idx not in final_scores: final_scores[idx] = 0.0
             final_scores[idx] += (1.0 / (rank + RRF_K)) + get_boost(idx)
             
-        # Process BM25 Ranks
         for rank, idx in enumerate(top_n_bm25):
             if idx not in final_scores: final_scores[idx] = 0.0
             final_scores[idx] += (1.0 / (rank + RRF_K)) + get_boost(idx)
             
-        # Sort by fused score
-        sorted_results = sorted(final_scores.items(), key=lambda x: x[1], reverse=True)
+        # --- 4. NEW LOGIC: Dynamic Cutoff (The "Noise Gate") ---
+        # Sort all candidates by score
+        sorted_candidates = sorted(final_scores.items(), key=lambda x: x[1], reverse=True)
         
-        return sorted_results
+        if not sorted_candidates:
+            return []
+
+        # Get the score of the absolute best match
+        best_score = sorted_candidates[0][1]
+        
+        # Only keep chunks that are at least 50% as good as the winner
+        # This deletes the "long tail" of garbage results
+        filtered_results = []
+        for idx, score in sorted_candidates:
+            if score >= (best_score * 0.5):
+                filtered_results.append((idx, score))
+            
+            # Stop if we have enough good ones (e.g., top 20 candidates max)
+            if len(filtered_results) >= 20:
+                break
+                
+        # Return the top k from the FILTERED list
+        return filtered_results[:5]  # STRICTLY return 5
 
 # --- ROUTES ---
 @app.route('/')
@@ -243,22 +256,27 @@ def chat():
             yield json.dumps({"type": "context", "data": context_data}) + "\n"
 
             sys_msg = (
-                "You are an intelligent document assistant. Use the Context below to answer the user's question. "
-                "1. MATCH SCENARIOS: If the user's question describes a situation (e.g., 'I shared figures', 'My friend is a journalist'), look for a matching 'Q&A' or 'Example' in the text. "
-                "2. APPLY THE RULE: If a Q&A in the text says 'No' to a similar situation, your answer must be 'No'. Do not hedge or be vague. "
-                "3. CHECK SIDEBARS: Important rules are often in '[ADDITIONAL NOTES]' or 'Remember' sections. "
-                "4. If the answer is not in the text, say 'I don't know'."
-                "5. If there are matching keywords in the retrieved context, prioritize those sections in your answer."
-                "You are a precise Financial Data Analyst. Use the Context below to answer the user's question. "
-                "1. KEYWORD PRIORITY: If the user asks for a specific metric (e.g., 'Free Cash Flow'), SCAN the context for those exact words. "
-                "   - If you find the words, the number immediately nearby IS the answer. Extract it. "
-                "2. DATE MAPPING: Recognize financial periods. "
-                "   - 'March 2022' = 'Q4 FY22', 'Q4', or 'Year Ended 31 March 2022'. "
-                "   - 'FY22' = 'Full Year 2022'. "
-                "3. HANDLE MESSY TEXT: Data may look like 'Free Cash Flow ... 340'. The answer is 340. "
-                "4. BE DIRECT: Do not say 'The text mentions...' -> Just answer 'The value is £340m'. "
-                "5. If the answer is truly not in the text, say 'I don't know'."
-            )
+                        "You are an Intelligent Knowledge Assistant. Your task is to answer the user's question using ONLY the provided Context chunks.\n\n"
+
+                        "--- CRITICAL ANALYSIS RULES ---\n"
+                        "1. DETECT THE INTENT:\n"
+                        "   - IF asking 'CAN I...' or 'IS IT ALLOWED...': Check the rules. If prohibited, start with 'No' and explain why.\n"
+                        "   - IF asking 'WHAT IS THE POLICY...' or 'STANCE': Do not just say 'No'. Summarize the full scope of the rule (e.g., who it applies to, specific prohibitions, and core principles).\n" 
+                        "   - IF asking for DATA: Scan for exact keywords. The number immediately nearby is the answer.\n"
+                        "   - IF asking for CONCEPTS: Synthesize a clear definition.\n"
+    
+                        "2. HANDLE PARSING ARTIFACTS:\n"
+                        "   - Tables may look broken. If you see 'Value ... ... 10', the value is 10.\n"
+                        "   - IMPORTANT: Always check sections marked '[ADDITIONAL NOTES / SIDEBARS]'. Vital headers and rules often appear there.\n"
+    
+                        "3. DATE & TERM MAPPING:\n"
+                        "   - 'FY22' = '2022', 'Q1' = 'First Quarter'.\n"
+    
+                        "--- RESPONSE GUIDELINES ---\n"
+                        "- BE COMPREHENSIVE FOR RULES: Mention key details like 'zero tolerance', 'agents', or 'intermediaries' if present in the text.\n"
+                        "- BE PRECISE FOR DATA: Quote specific values.\n"
+                        "- NO HALLUCINATIONS: If the answer is not in the text, strictly say 'I don't know'."
+                    )
             user_msg = f"Context:\n{context_str}\n\nQuestion: {query}\n\nAnswer:"
             
             stream = ollama.chat(

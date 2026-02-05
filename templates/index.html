@@ -455,10 +455,12 @@
                 </div>`;
 
             try {
+                // --- FIX: SEND ONLY THE NEW MESSAGE ---
+                // The Backend's "State" now handles the history!
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({message: "```\n" + last_response.join('\n') + "\n```\n" + msg})
+                    body: JSON.stringify({ message: msg }) 
                 });
 
                 const reader = response.body.getReader();
@@ -485,16 +487,15 @@
                                 contentDiv.innerText += data.content;
                                 chatBox.scrollTop = chatBox.scrollHeight;
                             }
-                            
                         } catch (e) {}
                     }
                 }
                 
-                last_response.push(contentDiv.innerText);
-                last_response = last_response.slice(-5);
+                // REMOVED: last_response.push(...) logic
                 setStatus('Ready', 'emerald');
                 
             } catch (e) {
+                console.error(e); // Good for debugging
                 contentDiv.innerHTML = `
                     <div style="color:var(--status-red); display: flex; align-items: center; gap: 0.5rem;">
                         <i class="fa-solid fa-exclamation-circle"></i>

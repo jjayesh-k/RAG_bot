@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tata Motors AI Assistant | Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        :root {
+            /* Enhanced Color Palette */
+            --primary: #3b82f6;
+            --primary-light: #93c5fd;
+            --primary-dark: #2563eb;
+            --primary-glow: rgba(59, 130, 246, 0.15);
+            
+            --accent-teal: #14b8a6;
+            --accent-purple: #a855f7;
+            --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
+            --accent-amber: #f59e0b;
+            
+            --bg-canvas: #fafbfc;
+            --bg-elevated: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --text-muted: #94a3b8;
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
+            
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 50%, #fdf4ff 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: var(--spacing-xl);
+        }
+
+        /* Enhanced Background Pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(20, 184, 166, 0.06) 0%, transparent 50%);
+            animation: bgFloat 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(1deg); }
+            66% { transform: translate(-20px, 20px) rotate(-1deg); }
+        }
+
+        /* Main App Container - More Spacious */
+        .app-window {
+            width: 100%;
+            max-width: 1600px;
+            height: 92vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            animation: appReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        @keyframes appReveal {
+            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* --- Header with Gradient --- */
+        header {
+            height: 85px;
+            padding: 0 var(--spacing-2xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+            opacity: 0.3;
+        }
+
+        .header-left { 
+            display: flex; 
+            align-items: center; 
+            gap: var(--spacing-md); 
+        }
+        
+        .logo-container {
+            width: 52px; 
+            height: 52px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+        }
+        
+        .header-info h1 { 
+            font-size: 1.00rem; 
+            font-weight: 800; 
+            color: var(--text-main); 
+            letter-spacing: 0.5px;
+            margin-bottom: 1px;
+        }
+        
+        .header-info span { 
+            font-size: 0.8rem; 
+            color: var(--primary); 
+            font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .status-pill {
+            background: var(--bg-elevated);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .status-pill:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .status-dot { 
+            width: 10px; 
+            height: 10px; 
+            border-radius: 50%; 
+            background: var(--text-muted); 
+            transition: all 0.4s ease;
+            box-shadow: 0 0 0 0 rgba(148, 163, 184, 0.4);
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(148, 163, 184, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(148, 163, 184, 0); }
+        }
+
+        /* --- Main Layout - More Spacious --- */
+        .main-content { 
+            display: flex; 
+            flex: 1; 
+            overflow: hidden;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-lg);
+        }
+
+        /* --- Sidebar - Enhanced Design --- */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.4) 100%);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .sidebar-section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .upload-zone {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px dashed #cbd5e1;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-zone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-glow) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .upload-zone:hover {
+            border-color: var(--primary);
+            background: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .upload-zone:hover::before {
+            opacity: 1;
+        }
+        
+        .upload-zone i { 
+            font-size: 2.5rem; 
+            color: var(--primary); 
+            margin-bottom: var(--spacing-md);
+            transition: transform 0.3s ease;
+        }
+        
+        .upload-zone:hover i {
+            transform: scale(1.1);
+        }
+        
+        .upload-zone p { 
+            font-size: 0.95rem; 
+            font-weight: 700; 
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+        
+        .upload-zone span { 
+            font-size: 0.8rem; 
+            color: var(--text-sub); 
+        }
+
+        .files-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            padding-right: var(--spacing-xs);
+        }
+        
+        .file-item {
+            background: var(--bg-elevated);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            border: 1px solid rgba(0,0,0,0.04);
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .file-item:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateX(4px);
+        }
+        
+        @keyframes slideIn { 
+            from { opacity: 0; transform: translateX(-20px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
+
+        .file-icon-box {
+            width: 42px; 
+            height: 42px;
+            background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .trash-btn {
+            width: 32px; 
+            height: 32px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+            color: var(--accent-rose);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .trash-btn:hover { 
+            background: var(--accent-rose); 
+            color: white; 
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* --- Chat Area - Modern and Spacious --- */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.3) 100%);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: var(--radius-lg);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: var(--spacing-2xl);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xl);
+            scroll-behavior: smooth;
+        }
+
+        /* Message Bubbles - Enhanced */
+        .message { 
+            display: flex; 
+            gap: var(--spacing-md); 
+            max-width: 80%; 
+            animation: messageSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.user { 
+            align-self: flex-end; 
+            flex-direction: row-reverse; 
+        }
+        
+        .avatar {
+            width: 48px; 
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .assistant .avatar { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent-teal) 100%); 
+            color: white; 
+        }
+        
+        .user .avatar { 
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); 
+            color: var(--primary); 
+            border: 1px solid rgba(0,0,0,0.06); 
+        }
+
+        .bubble {
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            line-height: 1.7;
+            position: relative;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+        
+        .bubble:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .assistant .bubble { 
+            background: var(--bg-elevated); 
+            color: var(--text-main); 
+            border-top-left-radius: 6px;
+        }
+        
+        .user .bubble { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); 
+            color: white; 
+            border-top-right-radius: 6px;
+        }
+
+        /* Input Area - Premium Design */
+        .input-wrapper {
+            padding: var(--spacing-xl) var(--spacing-2xl);
+            background: linear-gradient(to top, rgba(255,255,255,0.95) 70%, transparent);
+            backdrop-filter: blur(10px);
+        }
+        
+        .input-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-lg);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(0,0,0,0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .input-container:focus-within {
+            transform: translateY(-4px);
+            border-color: var(--primary-light);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+        }
+
+        .input-container input {
+            flex: 1;
+            border: none;
+            padding: var(--spacing-md);
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            color: var(--text-main);
+        }
+        
+        .input-container input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .action-btn {
+            width: 50px; 
+            height: 50px;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 1.15rem;
+        }
+        
+        .btn-attach { 
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); 
+            color: var(--text-sub); 
+        }
+        
+        .btn-attach:hover { 
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%); 
+            color: var(--text-main);
+            transform: scale(1.05);
+        }
+        
+        .btn-send { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); 
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-send:hover { 
+            transform: scale(1.08);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-send:disabled { 
+            background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%); 
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        /* Welcome Screen - Enhanced */
+        .welcome-screen {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-sub);
+            padding: var(--spacing-2xl);
+        }
+        
+        .welcome-screen i {
+            font-size: 5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent-teal), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: var(--spacing-xl);
+            animation: welcomeFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes welcomeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Scrollbars - Styled */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%); 
+            border-radius: 100px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { 
+            background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); 
+        }
+
+        /* Loading Animation - Enhanced */
+        .dot-flashing {
+            display: flex; 
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dot-flashing div {
+            width: 8px; 
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: dotPulse 1.4s infinite ease-in-out;
+        }
+        
+        .dot-flashing div:nth-child(2) { animation-delay: 0.2s; }
+        .dot-flashing div:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes dotPulse { 
+            0%, 100% { opacity: 0.3; transform: scale(0.8); } 
+            50% { opacity: 1; transform: scale(1.2); } 
+        }
+
+        /* Security Badge */
+        .security-badge {
+            margin-top: auto; 
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); 
+            padding: var(--spacing-lg); 
+            border-radius: var(--radius-md); 
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .security-badge p {
+            font-size: 0.8rem; 
+            color: var(--text-sub); 
+            line-height: 1.6;
+        }
+        
+        .security-badge i {
+            color: var(--accent-emerald);
+            margin-right: 6px;
+        }
+        
+        .security-badge strong {
+            color: var(--text-main);
+        }
+
+        /* File Count Badge */
+        .file-count-badge {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Footer Text */
+        .footer-text {
+            text-align: center; 
+            font-size: 0.7rem; 
+            color: var(--text-muted); 
+            margin-top: var(--spacing-md); 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .sidebar { width: 320px; }
+            .app-window { max-width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            .main-content { flex-direction: column; }
+            .sidebar { width: 100%; max-height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-window">
+        <header>
+            <div class="header-left">
+                <div class="logo-container">
+                    <img src="{{ url_for('static', filename='tata.png') }}" alt="Tata Motors">
+                </div>
+                <div class="header-info">
+                    <h1>TATA MOTORS</h1>
+                    <span>Enterprise AI Core</span>
+                </div>
+            </div>
+            <div class="status-pill">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">System Ready</span>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div>
+                    <div class="sidebar-section-label">
+                        Knowledge Base
+                        <button class="trash-btn" onclick="clearMemory()" title="Wipe Session Memory">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                    <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                        <input type="file" id="fileInput" multiple accept=".txt,.pdf" style="display:none">
+                        <div id="stateIdle">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <p>Upload Documents</p>
+                            <span>PDF or TXT supported</span>
+                        </div>
+                        <div id="stateLoading" style="display:none">
+                            <div class="dot-flashing" style="margin-bottom: 12px;"><div></div><div></div><div></div></div>
+                            <p>Indexing...</p>
+                        </div>
+                        <div id="stateSuccess" style="display:none">
+                            <i class="fa-solid fa-circle-check" style="color:var(--accent-emerald)"></i>
+                            <p id="fileCountMsg">Complete</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section-label">
+                    Indexed Files <span class="file-count-badge" id="fileCount">0</span>
+                </div>
+                <div class="files-list" id="filesList">
+                </div>
+
+                <div class="security-badge">
+                    <p>
+                        <i class="fa-solid fa-shield-check"></i> 
+                        <strong>Secure Environment</strong><br>
+                        Conversation is encrypted and private to Tata Motors.
+                    </p>
+                </div>
+            </aside>
+
+            <main class="chat-area">
+                <div class="chat-messages" id="chatBox">
+                    <div class="welcome-screen" id="welcomeScreen">
+                        <i class="fa-solid fa-microchip-ai"></i>
+                        <h2 style="font-size: 2rem; margin-bottom: 12px; color: var(--text-main); font-weight: 700;">Welcome to Assistant Pro</h2>
+                        <p style="max-width: 480px; line-height: 1.7; font-size: 1.05rem;">Upload technical documentation or policy files to start a context-aware conversation.</p>
+                    </div>
+                </div>
+
+                <div class="input-wrapper">
+                    <div class="input-container">
+                        <button class="action-btn btn-attach" onclick="document.getElementById('fileInput').click()">
+                            <i class="fa-solid fa-paperclip"></i>
+                        </button>
+                        <input type="text" id="userInput" placeholder="Ask a professional question..." onkeypress="handleEnter(event)" autocomplete="off">
+                        <button class="action-btn btn-send" id="sendBtn" onclick="sendMessage()">
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </button>
+                    </div>
+                    <p class="footer-text">
+                        TATA MOTORS PROPRIETARY • CONFIDENTIAL
+                    </p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        /* ALL SCRIPT LOGIC IS PRESERVED AS PER YOUR REQUEST 
+           TO MAINTAIN BACKEND CONNECTION
+        */
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const stateIdle = document.getElementById('stateIdle');
+        const stateLoading = document.getElementById('stateLoading');
+        const stateSuccess = document.getElementById('stateSuccess');
+        const fileCountMsg = document.getElementById('fileCountMsg');
+        const statusText = document.getElementById('statusText');
+        const statusDot = document.getElementById('statusDot');
+        const filesList = document.getElementById('filesList');
+        const fileCount = document.getElementById('fileCount');
+        
+        let uploadedFiles = [];
+
+        async function clearMemory() {
+            if(!confirm("Clear all AI memory and uploaded files?")) return;
+            try {
+                const res = await fetch('/reset', { method: 'POST' });
+                if(res.ok) {
+                    uploadedFiles = [];
+                    updateFilesList();
+                    document.getElementById('chatBox').innerHTML = `
+                        <div class="welcome-screen">
+                            <i class="fa-solid fa-trash-clock"></i>
+                            <h2 style="color:var(--text-main)">Memory Wiped</h2>
+                            <p>Ready for a fresh session.</p>
+                        </div>
+                    `;
+                    setStatus('Ready', 'slate');
+                }
+            } catch(e) { alert("Failed to clear memory"); }
+        }
+
+        // DnD
+        ['dragenter', 'dragover'].forEach(evt => {
+            dropZone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--primary)';
+            });
+        });
+        
+        ['dragleave', 'drop'].forEach(evt => {
+            dropZone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = '';
+            });
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if(files.length > 0) uploadFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if(e.target.files.length > 0) uploadFiles(e.target.files);
+            fileInput.value = '';
+        });
+
+        async function uploadFiles(files) {
+            stateIdle.style.display = 'none';
+            stateLoading.style.display = 'block';
+            setStatus('Indexing...', 'yellow');
+
+            const formData = new FormData();
+            const newFiles = [];
+            for (const file of files) {
+                formData.append('files', file);
+                newFiles.push({
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    type: file.name.split('.').pop().toUpperCase()
+                });
+            }
+
+            try {
+                const res = await fetch('/upload', { method: 'POST', body: formData });
+                const data = await res.json();
+                if(res.ok) {
+                    uploadedFiles = [...uploadedFiles, ...newFiles];
+                    updateFilesList();
+                    fileCountMsg.innerText = `Added ${data.count} Chunks`;
+                    stateLoading.style.display = 'none';
+                    stateSuccess.style.display = 'block';
+                    setStatus('System Ready', 'emerald');
+                    
+                    setTimeout(() => {
+                        stateSuccess.style.display = 'none';
+                        stateIdle.style.display = 'block';
+                    }, 3000);
+                }
+            } catch (e) { setStatus('Upload Error', 'red'); }
+        }
+
+        function updateFilesList() {
+            filesList.innerHTML = '';
+            uploadedFiles.forEach((file) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                const icon = file.type === 'PDF' ? 'fa-file-pdf' : 'fa-file-lines';
+                fileItem.innerHTML = `
+                    <div class="file-icon-box"><i class="fa-solid ${icon}"></i></div>
+                    <div style="flex:1; min-width:0;">
+                        <p style="font-size:0.85rem; font-weight:700; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${file.name}</p>
+                        <p style="font-size:0.7rem; color:var(--text-sub);">${file.size}</p>
+                    </div>
+                `;
+                filesList.appendChild(fileItem);
+            });
+            fileCount.textContent = uploadedFiles.length;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i)) + ' ' + sizes[i];
+        }
+
+        function setStatus(text, color) {
+            const colors = { 'yellow': '#F59E0B', 'emerald': '#10B981', 'red': '#EF4444', 'slate': '#94a3b8' };
+            statusText.innerText = text;
+            statusDot.style.background = colors[color] || colors['slate'];
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const chatBox = document.getElementById('chatBox');
+            const sendBtn = document.getElementById('sendBtn');
+            const msg = input.value.trim();
+            if(!msg) return;
+
+            const welcome = document.getElementById('welcomeScreen');
+            if(welcome) welcome.style.display = 'none';
+
+            addMessage("You", msg, true);
+            input.value = "";
+            input.disabled = true;
+            sendBtn.disabled = true;
+            setStatus('AI is Thinking...', 'yellow');
+
+            const botMsgDiv = addMessage("TATA Assistant", "", false);
+            const contentDiv = botMsgDiv.querySelector('.bubble');
+            contentDiv.innerHTML = `<div class="dot-flashing"><div></div><div></div><div></div></div>`;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ message: msg }) 
+                });
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let isFirstToken = true;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    const chunk = decoder.decode(value);
+                    const lines = chunk.split('\n');
+                    for (const line of lines) {
+                        if (!line.trim()) continue;
+                        try {
+                            const data = JSON.parse(line);
+                            if (data.type === 'token') {
+                                if (isFirstToken) { contentDiv.innerText = ""; isFirstToken = false; }
+                                contentDiv.innerText += data.content;
+                                chatBox.scrollTop = chatBox.scrollHeight;
+                            }
+                        } catch (e) {}
+                    }
+                }
+                setStatus('System Ready', 'emerald');
+            } catch (e) {
+                contentDiv.innerHTML = `<span style="color:var(--accent-rose)">System connection failure. Please retry.</span>`;
+                setStatus('Ready', 'red');
+            }
+            input.disabled = false;
+            sendBtn.disabled = false;
+            input.focus();
+        }
+
+        function addMessage(sender, text, isUser) {
+            const chatBox = document.getElementById('chatBox');
+            const div = document.createElement('div');
+            div.className = `message ${isUser ? 'user' : 'assistant'}`;
+            const icon = isUser ? '<i class="fa-solid fa-user-tie"></i>' : '<i class="fa-solid fa-robot"></i>';
+            div.innerHTML = `
+                <div class="avatar">${icon}</div>
+                <div class="bubble">${text}</div>
+            `;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return div;
+        }
+
+        function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
+    </script>
+</body>
+</html>

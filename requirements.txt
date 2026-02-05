@@ -21,3 +21,5 @@ pdf2image
 pymupdf
 pymupdf4llm
 sys
+faiss-cpu
+rank_bm25

@@ -9,6 +9,7 @@ FIXED VERSION:
 import pymupdf4llm
 import fitz  # PyMuPDF
 import re
+import os
 from typing import List, Dict
 from dataclasses import dataclass
 
@@ -21,7 +22,7 @@ class ParsedChunk:
     metadata: Dict
 
 class SmartMultiColumnParser:
-    def __init__(self, chunk_size: int = 1000, chunk_overlap: int = 200):
+    def __init__(self, chunk_size: int = 1000, chunk_overlap: int = 400):
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.chunk_counter = 0
@@ -38,6 +39,7 @@ class SmartMultiColumnParser:
         
         # 2. Get Smart Markdown (Page by Page)
         md_pages = pymupdf4llm.to_markdown(pdf_path, page_chunks=True)
+        # print("--------------> md_pages", md_pages)
         
         all_chunks = []
         self.chunk_counter = 0
@@ -45,12 +47,15 @@ class SmartMultiColumnParser:
         for i, md_data in enumerate(md_pages):
             page_num = i + 1
             smart_text = md_data['text']
+            # print("--------->",smart_text)
             
             # --- THE MAGIC: RECOVER LOST TEXT ---
             raw_page = doc[i]
+            # print("--------->",raw_page)
             
             # FIX #1: Added sort=True to force Reading Order (Header -> Body)
             raw_blocks = raw_page.get_text("blocks", sort=True)
+            # print("--------------> ", raw_blocks)
             
             missing_text = []
             smart_text_norm = self._normalize(smart_text)
@@ -109,3 +114,20 @@ class SmartMultiColumnParser:
             if start >= end: start = end # Safety
 
         return chunks
+
+if __name__ == "__main__":
+    # CHANGE THIS to your actual PDF filename
+    pdf_filename = r"D:\JK\RAG\RAG_APP_FINAL\input_files\Tata Code Of Conduct.pdf" 
+
+    if os.path.exists(pdf_filename):
+        parser = SmartMultiColumnParser()
+        result_chunks = parser.parse_and_chunk(pdf_filename)
+
+        print(f"\n✅ Successfully created {len(result_chunks)} chunks.")
+        
+        # Print the first 3 chunks as a preview
+        for chunk in result_chunks[:3]:
+            print(f"\n--- Chunk {chunk.id} (Page {chunk.page_num}) ---")
+            print(chunk.content[:200] + "...") # Show first 200 chars
+    else:
+        print(f"❌ File '{pdf_filename}' not found. Please add a PDF to this folder.")

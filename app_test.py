@@ -411,8 +411,8 @@ def reset_knowledge_base():
 
 if __name__ == '__main__':
     def open_browser():
-        webbrowser.open_new('http://127.0.0.1:5000/')
+        webbrowser.open_new('http://127.0.0.1:8080/')
         
     print("Starting Hybrid RAG Engine...")
     Timer(1.5, open_browser).start()
-    app.run(port=5000, debug=True, use_reloader=False)
+    app.run(port=8080, debug=True, use_reloader=False)

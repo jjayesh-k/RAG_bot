@@ -36,6 +36,7 @@ class SmartMultiColumnParser:
         
         # 1. Open Doc for Raw Extraction
         doc = fitz.open(pdf_path)
+        # for _ in doc: print("--------->", _)
         
         # 2. Get Smart Markdown (Page by Page)
         md_pages = pymupdf4llm.to_markdown(pdf_path, page_chunks=True)

@@ -1,161 +1,25 @@
 from flask import Flask, request, jsonify, render_template, Response, stream_with_context
 from flask_cors import CORS
-import ollama
 import time
 import os
-import numpy as np
 import json
-import threading
-import re
+import requests
 from werkzeug.utils import secure_filename
-import tempfile
-import sys
 import webbrowser
 from threading import Timer
 import traceback
-from flashrank import Ranker, RerankRequest
+from flashrank import RerankRequest
 
 # --- CUSTOM MODULES ---
-# Using your existing filenames
-from multi_parser_test import SmartMultiColumnParser 
-from index_test import build_rag_index, to_float16
-from config import EMBEDDING_MODEL, LANGUAGE_MODEL
-
-# --- CONFIGURATION ---
-if getattr(sys, 'frozen', False):
-    app_dir = os.path.dirname(sys.executable)
-else:
-    app_dir = os.path.dirname(os.path.abspath(__file__))
-
-settings_path = os.path.join(app_dir, 'settings.json')
-
-if os.path.exists(settings_path):
-    print(f"✓ Loading custom settings from {settings_path}")
-    try:
-        with open(settings_path, 'r') as f:
-            settings = json.load(f)
-            EMBEDDING_MODEL = settings.get('EMBEDDING_MODEL', EMBEDDING_MODEL)
-            LANGUAGE_MODEL = settings.get('LANGUAGE_MODEL', LANGUAGE_MODEL)
-    except Exception as e:
-        print(f"⚠️ Error loading settings: {e}")
-
-print(f"Using Models -> Language: {LANGUAGE_MODEL} | Embedding: {EMBEDDING_MODEL}")
+from utils.parser import SmartMultiColumnParser 
+from utils.indexer import build_rag_index
+from config import LANGUAGE_MODEL, OLLAMA_URL
+from utils.query_rewriter import rewrite_query
+from utils.retriever import perform_hybrid_search
+from state import state
 
 app = Flask(__name__)
 CORS(app)
-
-# --- GLOBAL STATE ---
-class RAGState:
-    def __init__(self):
-        self.vector_index = None
-        self.bm25_index = None   # <--- NEW: Stores the Keyword Index
-        self.chunk_map = {}
-        self.all_chunks = [] 
-        self.is_ready = False
-        self.is_processing = False
-        self.lock = threading.Lock()
-        self.chat_history = []
-        self.ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2")
-        
-state = RAGState()
-
-# --- HELPER: HYBRID SEARCH (RRF) ---
-def perform_hybrid_search(query, k=60):
-    with state.lock:
-        if not state.vector_index or not state.bm25_index:
-            return []
-            
-        # 1. Vector Search
-        response = ollama.embed(model=EMBEDDING_MODEL, input=query)
-        embed_np = np.array(response['embeddings'][0]).reshape(1, -1)
-        D, I = state.vector_index.search(to_float16(embed_np), k)
-        
-        # 2. BM25 Search
-        tokenized_query = re.findall(r'\w+', query.lower())
-        bm25_scores = state.bm25_index.get_scores(tokenized_query)
-        top_n_bm25 = np.argsort(bm25_scores)[::-1][:k]
-        
-        # 3. Fuse Rankings (RRF)
-        final_scores = {}
-        RRF_K = 60
-        
-        red_flags = ["political", "donation", "bribe", "gift", "trust", "conflict", "relative"]
-        active_flags = [word for word in red_flags if word in query.lower()]
-
-        def get_boost(chunk_idx):
-            if not active_flags: return 0.0
-            text = state.chunk_map.get(chunk_idx, "").lower()
-            return 0.15 if any(flag in text for flag in active_flags) else 0.0
-
-        for rank, idx in enumerate(I[0]):
-            if idx == -1: continue
-            if idx not in final_scores: final_scores[idx] = 0.0
-            final_scores[idx] += (1.0 / (rank + RRF_K)) + get_boost(idx)
-            
-        for rank, idx in enumerate(top_n_bm25):
-            if idx not in final_scores: final_scores[idx] = 0.0
-            final_scores[idx] += (1.0 / (rank + RRF_K)) + get_boost(idx)
-            
-        # --- 4. NEW LOGIC: Dynamic Cutoff (The "Noise Gate") ---
-        # Sort all candidates by score
-        sorted_candidates = sorted(final_scores.items(), key=lambda x: x[1], reverse=True)
-        
-        if not sorted_candidates:
-            return []
-
-        # Get the score of the absolute best match
-        best_score = sorted_candidates[0][1]
-        
-        # Only keep chunks that are at least 50% as good as the winner
-        # This deletes the "long tail" of garbage results
-        filtered_results = []
-        for idx, score in sorted_candidates:
-            if score >= (best_score * 0.5):
-                filtered_results.append((idx, score))
-            
-            # Stop if we have enough good ones (e.g., top 20 candidates max)
-            if len(filtered_results) >= 20:
-                break
-                
-        # Return the top k from the FILTERED list
-        return filtered_results[:5]  # STRICTLY return 5
-
-def rewrite_query(user_question, history):
-    """
-    Uses the LLM to rewrite the user's question into a standalone search query
-    based on the conversation history.
-    """
-    # If history is empty, no need to rewrite
-    if not history:
-        return user_question
-
-    print("🔄 Rewriting query with history...")
-    
-    system_prompt = (
-        "You are a Search Query Generator. Your task is to rephrase the User's last question "
-        "into a keyword-optimized search query. You have access to the conversation history.\n\n"
-        "--- CRITICAL RULES ---\n"
-        "1. LOOK FOR TOPIC SHIFTS: If the user asks about a NEW concept (e.g., switching from 'Ethics' to 'Revenue'), "
-        "   IGNORE the previous document context (dates, page numbers, document titles). Treat it as a fresh search.\n"
-        "2. RESOLVE PRONOUNS ONLY: Only use history to define words like 'it', 'they', or 'the company'.\n"
-        "3. NO HYPOTHETICALS: Do not add specific dates or page numbers from history unless the user explicitly mentioned them in the CURRENT question.\n"
-        "4. KEEP IT BROAD: If the user asks 'What was Q4 revenue?', do NOT append a document name. Just output 'Q4 revenue'.\n"
-        "5. OUTPUT: Output ONLY the search query text."
-    )
-    
-    # Simple history string
-    history_str = "\n".join([f"{msg['role']}: {msg['content']}" for msg in history[-4:]]) # Keep last 4 turns
-    
-    prompt = f"History:\n{history_str}\n\nUser's Last Question: {user_question}\n\nRewritten Standalone Query:"
-    
-    response = ollama.chat(model=LANGUAGE_MODEL, messages=[
-        {'role': 'system', 'content': system_prompt},
-        {'role': 'user', 'content': prompt}
-    ])
-    
-    new_query = response['message']['content'].strip()
-    print(f"✨ Original: '{user_question}' -> Rewritten: '{new_query}'")
-    return new_query
 
 # --- ROUTES ---
 @app.route('/')
@@ -185,7 +49,7 @@ def upload_files():
 
         for f in files:
             filename = secure_filename(f.filename)
-            print(f"📄 Reading: {filename}")
+            print(f"Reading: {filename}")
             file_path = os.path.join(TEMP_DIR, filename)
             f.save(file_path)
 
@@ -211,18 +75,18 @@ def upload_files():
                     print(f"   -> Added text file: {filename}")
 
             except Exception as e:
-                print(f"❌ Error processing {filename}: {e}")
+                print(f"Error processing {filename}: {e}")
                 traceback.print_exc()
             finally:
                 time.sleep(0.1)
                 try:
                     if os.path.exists(file_path): os.remove(file_path)
-                except Exception as e: print(f"⚠️ Cleanup warning: {e}")
+                except Exception as e: print(f"Cleanup warning: {e}")
 
         # --- 2. INDEXING ---
         with state.lock:
             state.all_chunks.extend(new_chunks_text)
-            print(f"📊 Building Hybrid Index with {len(state.all_chunks)} chunks...")
+            print(f"Building Hybrid Index with {len(state.all_chunks)} chunks...")
             
             try:
                 v_index, b_index, mapping = build_rag_index(state.all_chunks)
@@ -233,11 +97,11 @@ def upload_files():
                 state.is_ready = True
                 
             except ValueError as ve:
-                print(f"❌ Indexer Error: {ve}")
+                print(f"Indexer Error: {ve}")
                 return jsonify({"error": "Indexer mismatch."}), 500
 
         elapsed_time = time.time() - start_time
-        print(f"✅ Processing complete in {elapsed_time:.2f} seconds")
+        print(f"Processing complete in {elapsed_time:.2f} seconds")
 
         return jsonify({
             "message": f"Successfully indexed {len(new_chunks_text)} new chunks.",
@@ -246,20 +110,20 @@ def upload_files():
         })
 
     except Exception as e:
-        print(f"❌ CRITICAL UPLOAD ERROR: {e}")
+        print(f"CRITICAL UPLOAD ERROR: {e}")
         return jsonify({"error": str(e)}), 500
         
     finally:
         # --- 3. TURN OFF BUSY FLAG (Always runs) ---
         with state.lock:
             state.is_processing = False
-            print("🔓 System Released (Ready for Queries)")
+            print("System Released (Ready for Queries)")
 
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.json
     raw_query = data.get("message", "").strip()
-
+    
     # Initialize history if it doesn't exist yet
     if not hasattr(state, 'chat_history'):
         state.chat_history = []
@@ -272,13 +136,13 @@ def chat():
 
     # --- 1. THE PATIENT WAIT LOOP (Queueing Logic) ---
     if state.is_processing:
-        print(f"⏳ System is busy. Holding query: '{raw_query[:20]}...'")
+        print(f"System is busy. Holding query: '{raw_query[:20]}...'")
         max_retries = 120  # Wait up to 60 seconds
         
         for _ in range(max_retries):
             time.sleep(0.5)
             if not state.is_processing:
-                print("✅ Processing complete! Resuming query.")
+                print("Processing complete! Resuming query.")
                 break
         else:
             return jsonify({"error": "System is overloaded or taking too long. Please try again."}), 503
@@ -293,7 +157,7 @@ def chat():
         search_query = rewrite_query(raw_query, state.chat_history)
 
         # --- STEP B: HYBRID SEARCH + RERANKING (The Quality Upgrade) ---
-        print(f"🔎 SEARCHING FOR: {search_query}")
+        print(f"SEARCHING FOR: {search_query}")
         
         # 1. Broad Search: Get Top 25 (We cast a wider net now)
         initial_results = perform_hybrid_search(search_query, k=25)
@@ -310,7 +174,7 @@ def chat():
                 })
 
         # 3. Rerank! (The AI Grader)
-        print(f"⚖️ Reranking {len(passages)} chunks...")
+        print(f"Reranking {len(passages)} chunks...")
         rerank_request = RerankRequest(query=search_query, passages=passages)
         reranked_results = state.ranker.rerank(rerank_request)
         
@@ -323,18 +187,15 @@ def chat():
             txt = result['text']
             score = result['score']
             top_k_chunks.append((idx, txt, score))
-        
-        # Optional: Sort by ID to maintain document reading order in the context
-        # top_k_chunks.sort(key=lambda x: x[0]) 
 
-        print(f"✅ Context Loaded: {len(top_k_chunks)} chunks (Filtered from {len(initial_results)})")
+        print(f"Context Loaded: {len(top_k_chunks)} chunks (Filtered from {len(initial_results)})")
 
         # --- DEBUG: PRINT RERANKED CHUNKS ---
         print("\n" + "="*50)
-        print(f"🏆 TOP {len(top_k_chunks)} RERANKED CHUNKS")
+        print(f"TOP {len(top_k_chunks)} RERANKED CHUNKS")
         print("="*50)
         for i, (idx, txt, score) in enumerate(top_k_chunks):
-            print(f"\n🔹 [Chunk #{idx}] (Relevance Score: {score:.4f})")
+            print(f"\n [Chunk #{idx}] (Relevance Score: {score:.4f})")
             print("-" * 30)
             print(txt.replace('\n', ' ')[:300] + "...") 
             print("-" * 30)
@@ -370,20 +231,34 @@ def chat():
             # Use raw_query for natural tone, but context is now hyper-relevant
             user_msg = f"Context:\n{context_str}\n\nQuestion: {raw_query}\n\nAnswer:"
             
-            stream = ollama.chat(
-                model=LANGUAGE_MODEL,
-                messages=[{'role': 'system', 'content': sys_msg}, {'role': 'user', 'content': user_msg}],
-                stream=True,
-                options={"stop": ["Context:", "Question:", "User:", "System:", "\n\n\n"], "temperature": 0.1}
+            payload = {
+                "model": LANGUAGE_MODEL,
+                "messages": [
+                    {"role": "system", "content": sys_msg},
+                    {"role": "user", "content": user_msg}
+                ],
+                "stream": True,
+                "options": {
+                    "temperature": 0.1,
+                    "stop": ["Context:", "Question:", "User:", "System:", "\n\n\n"]
+                }
+            }
+
+            response = requests.post(
+                f"{OLLAMA_URL}/api/chat",
+                json=payload,
+                stream=True
             )
 
             full_response_text = ""
 
-            for chunk in stream:
-                content = chunk['message']['content']
-                if content:
-                    full_response_text += content
-                    yield json.dumps({"type": "token", "content": content}) + "\n"
+            for line in response.iter_lines():
+                if line:
+                    chunk = json.loads(line.decode("utf-8"))
+                    if "message" in chunk and "content" in chunk["message"]:
+                        content = chunk["message"]["content"]
+                        full_response_text += content
+                        yield json.dumps({"type": "token", "content": content}) + "\n"
 
             # --- STEP D: UPDATE HISTORY ---
             state.chat_history.append({"role": "user", "content": raw_query})

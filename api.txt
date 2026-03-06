@@ -1,0 +1,5 @@
+http://tmlpnewskc31137.tmindia.tatamotors.com:11434/api/embed
+
+{"model":name(riya, nandi), "input":["input 1","input 2"]}
+
+http://localhost:1234/static/index.html

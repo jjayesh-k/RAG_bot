@@ -1,0 +1,9 @@
+
+02/03/2026 : Create a rag application from scratch to underatand the frontend/backend js framework(index.html) in detail 
+Partially Done was able to create the framework but the app was facing muiltiple issues tried to resolve most of them
+03/03/2026 : Add the company premises hosted models "riya" or "nandi" for embedding and language for the rag application instead of using ollama models stored locally in the pc 
+Done
+04/03/2026 : Add graph based search for the faiss vector store instead of linear search Understand the full detailed workflow of the rag application 
+Done inplemented "faiss.IndexHNSWFlat" instead of "faiss.IndexFlatL2" the only change is that IndexFlatL2 takes 1 argument whereas IndexHNSWFlat takes 2 and also studied indetail workflow and dataflow of rag application for the data preparation and preprocessing part
+05/03/2026 : Understand the full detailed workflow of the chat and generation part of the rag application which happens after data preparation
+Done studied how BM25 works, how results are ranked using RRF (Reciprocal Rank Fusion) from semantic and BM25 also found some potentioal misleads in the retrival logic need to study them further 

@@ -2,41 +2,59 @@ import os
 import sys
 import json
 
-# --- 1. Define Defaults (Hardcoded Fallbacks) ---
-DEFAULT_EMBED_MODEL = 'nomic-embed-text'
-# DEFAULT_LANG_MODEL = 'mistral:7b'
-DEFAULT_LANG_MODEL = 'phi3.5:3.8b-mini-instruct-q4_K_M'
-BATCH_SIZE = 50
-# --- 2. Determine App Directory ---
-# This handles the tricky part: finding the folder whether running as Python or .exe
-if getattr(sys, 'frozen', False):
-    # Running as compiled .exe
+# DEFAULT SETTINGS (Fallbacks)
+DEFAULT_CONFIG = {
+    "embedding_model": "nomic-embed-text",
+    "language_model": "phi3.5:3.8b-mini-instruct-q4_K_M",
+    "batch_size": 50,
+    "ollama_url": "http://tmlpnewskc31137.tmindia.tatamotors.com:11434"
+}
+
+# DETERMINE APPLICATION DIRECTORY
+# Works for both Python script and compiled .exe
+if getattr(sys, "frozen", False):
     APP_DIR = os.path.dirname(sys.executable)
 else:
-    # Running as script
     APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# --- 3. Define Paths ---
+# DEFINE PATHS
 CACHE_DIR = os.path.join(APP_DIR, "cache")
 INDEX_CACHE = os.path.join(APP_DIR, "index_cache")
-SETTINGS_PATH = os.path.join(APP_DIR, 'settings.json')
+SETTINGS_PATH = os.path.join(APP_DIR, "settings.json")
 
-# --- 4. Dynamic Config Loader ---
-final_embed_model = DEFAULT_EMBED_MODEL
-final_lang_model = DEFAULT_LANG_MODEL
+# Ensure required folders exist
+os.makedirs(CACHE_DIR, exist_ok=True)
+os.makedirs(INDEX_CACHE, exist_ok=True)
+
+# LOAD USER SETTINGS (settings.json)
+CONFIG = DEFAULT_CONFIG.copy()
 
 if os.path.exists(SETTINGS_PATH):
     try:
-        with open(SETTINGS_PATH, 'r') as f:
-            settings = json.load(f)
-            # Only overwrite if the key exists in json
-            final_embed_model = settings.get('embedding_model', final_embed_model)
-            final_lang_model = settings.get('language_model', final_lang_model)
-        print(f"✓ Loaded custom config: {final_lang_model} / {final_embed_model}")
+        with open(SETTINGS_PATH, "r") as f:
+            user_settings = json.load(f)
+
+        CONFIG.update(user_settings)
+
+        print(f"Loaded custom config: {CONFIG['language_model']} / {CONFIG['embedding_model']}")
+
     except Exception as e:
-        print(f"⚠️ Error reading settings.json: {e}")
+        print(f"Error reading settings.json: {e}")
 
-# --- 5. Export Constants (This is what app.py imports) ---
-EMBEDDING_MODEL = final_embed_model
-LANGUAGE_MODEL = final_lang_model
+else:
+    print("settings.json not found. Using defaults.")
 
+# EXPORT CONSTANTS (Used across project)
+EMBEDDING_MODEL = CONFIG["embedding_model"]
+LANGUAGE_MODEL = CONFIG["language_model"]
+BATCH_SIZE = CONFIG["batch_size"]
+OLLAMA_URL = CONFIG["ollama_url"]
+
+# DEBUG TEST
+if __name__ == "__main__":
+    print("APP_DIR:", APP_DIR)
+    print("SETTINGS_PATH:", SETTINGS_PATH)
+    print("Embedding Model:", EMBEDDING_MODEL)
+    print("Language Model:", LANGUAGE_MODEL)
+    print("Batch Size:", BATCH_SIZE)
+    print("Ollama URL:", OLLAMA_URL)

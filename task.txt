@@ -6,4 +6,6 @@ Done
 04/03/2026 : Add graph based search for the faiss vector store instead of linear search Understand the full detailed workflow of the rag application 
 Done inplemented "faiss.IndexHNSWFlat" instead of "faiss.IndexFlatL2" the only change is that IndexFlatL2 takes 1 argument whereas IndexHNSWFlat takes 2 and also studied indetail workflow and dataflow of rag application for the data preparation and preprocessing part
 05/03/2026 : Understand the full detailed workflow of the chat and generation part of the rag application which happens after data preparation
-Done studied how BM25 works, how results are ranked using RRF (Reciprocal Rank Fusion) from semantic and BM25 also found some potentioal misleads in the retrival logic need to study them further 
+Done studied how BM25 works, how results are ranked using RRF (Reciprocal Rank Fusion) from semantic and BM25 also found some potential misleads in the retrival logic need to study them further 
+06/03/2026 : Fix the retrival logic and clean the code and create a structured file structure (clean directory)
+Created a clean structured file structure of the rag app files and folders and pushed everything to github

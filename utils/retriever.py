@@ -13,8 +13,10 @@ def perform_hybrid_search(query, k=60):
         # 1. Vector Search
         response = requests.post(f"{OLLAMA_URL}/api/embed",
                                      json={"model": EMBEDDING_MODEL, "input": query})
+        # print("----------> response:", len(response.json()['embeddings'][0]))
         
         embed_np = np.array(response.json()['embeddings'][0]).reshape(1, -1)
+        # print("----------> embed_np:", embed_np.shape)
         D, I = state.vector_index.search(to_float16(embed_np), k)
         
         # 2. BM25 Search
@@ -61,13 +63,13 @@ def perform_hybrid_search(query, k=60):
                 filtered_results.append((idx, score))
             
             # Stop if we have enough good ones (e.g., top 20 candidates max)
-            if len(filtered_results) >= 20:
-                break
+            # if len(filtered_results) >= 20:
+            #     break
                 
         # Return the top k from the FILTERED list
         return filtered_results[:5]  # STRICTLY return 5
     
 if __name__ == "__main__":
     test_query = "What are the ethics guidelines for accepting gifts?"
-    results = perform_hybrid_search(test_query)
+    results = perform_hybrid_search(test_query, k=25)
     print("Search Results (idx, score):", results)
